@@ -864,7 +864,7 @@ function SceneSearch({ onNext }) {
                 fontFamily="IBM Plex Mono" fontSize={7} letterSpacing={1.5}
                 fill="rgba(237,233,224,.3)"
                 style={{ animation:"fade .4s ease .7s both" }}>
-                VP DEMO · CIO APPROVED
+                CIO VISION
               </text>
             </>
           )}
