@@ -2,4 +2,10 @@ node_modules/
 dist/
 .playwright-mcp/
 test-results/
-*.png
+tests/
+Dell_Case_Prep_Session_Summary.md
+applied_resume.md
+conversation.md
+dell_prep.md
+document_pdf.pdf
+
