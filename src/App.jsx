@@ -105,9 +105,20 @@ body { background:#000; color:#EDE9E0; font-family:system-ui,sans-serif; -webkit
 @keyframes fade    { from{opacity:0} to{opacity:1} }
 @keyframes rise    { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 @keyframes growX   { from{width:0} to{width:100%} }
+@keyframes scaleIn { from{transform:scaleX(0)} to{transform:scaleX(1)} }
 @keyframes drawPth { to{stroke-dashoffset:0} }
 @keyframes nodeIn  { from{opacity:0;transform:scale(.6)} to{opacity:1;transform:scale(1)} }
 @keyframes pulseGlow { 0%,100%{opacity:.4} 50%{opacity:.85} }
+@keyframes ringPulse { 0%,100%{box-shadow:0 0 20px rgba(201,169,110,.14),inset 0 0 16px rgba(201,169,110,.04)} 50%{box-shadow:0 0 44px rgba(201,169,110,.32),inset 0 0 24px rgba(201,169,110,.08)} }
+
+.play-btn {
+  width:72px; height:72px; border-radius:50%;
+  border:1px solid rgba(201,169,110,.38);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:border-color .3s ease, transform .25s ease;
+  animation:ringPulse 2.8s ease 0.5s infinite;
+}
+.play-btn:hover { border-color:rgba(201,169,110,.85); transform:scale(1.08); }
 `;
 
 // ── SCENE METADATA ────────────────────────────────────────────────
@@ -168,8 +179,7 @@ function SceneOpen({ onNext }) {
       setTimeout(() => setPh(3), 1700),  // SEARCH.
       setTimeout(() => setPh(4), 2350),  // PROVE.
       setTimeout(() => setPh(5), 3050),  // BUILD.
-      setTimeout(() => setPh(6), 3900),  // name block
-      setTimeout(() => setPh(7), 4900),  // → prompt
+      setTimeout(() => setPh(6), 3900),  // → prompt
     ];
     return () => ts.forEach(clearTimeout);
   }, []);
@@ -181,8 +191,8 @@ function SceneOpen({ onNext }) {
   });
 
   return (
-    <div className="scene" onClick={ph >= 6 ? onNext : undefined}
-      style={{ cursor: ph >= 6 ? 'pointer' : 'default' }}>
+    <div className="scene" onClick={ph >= 5 ? onNext : undefined}
+      style={{ cursor: ph >= 5 ? 'pointer' : 'default' }}>
       <div style={{ maxWidth: 'min(840px,100%)', width:'100%', padding:'0 clamp(24px,5vw,72px)', position:'relative', zIndex:5 }}>
 
         {/* Hook — "This is how I work." leads the narrative */}
@@ -225,21 +235,9 @@ function SceneOpen({ onNext }) {
           ))}
         </div>
 
-        {/* Name block */}
         {ph >= 6 && (
-          <div style={{
-            display:'flex', justifyContent:'space-between', alignItems:'flex-end',
-            animation:'fade .7s ease both',
-          }}>
-            <div>
-              <div className="gold-lbl" style={{ marginBottom:6 }}>VISHNU PRATAP KUMAR</div>
-              <div className="lbl">DELL TECHNOLOGIES · SCA TPM · MAY 2026</div>
-            </div>
-            {ph >= 7 && (
-              <div className="gold-lbl" style={{ animation:'fade 1s ease both', cursor:'pointer' }}>
-                PRESS → TO BEGIN
-              </div>
-            )}
+          <div style={{ display:'flex', justifyContent:'flex-end', animation:'fade 1s ease both' }}>
+            <div className="gold-lbl" style={{ cursor:'pointer' }}>CLICK → TO CONTINUE</div>
           </div>
         )}
       </div>
@@ -362,7 +360,7 @@ function SceneBuild({ onNext }) {
   const streams = [
     { title:'Software Catalog', kicker:'employee experience', color:T.gold,
       body:'One landing place for employees, SAM, owners, admins, and approvers.',
-      metrics:[['5K→200','incidents'],['4K','approvals'],['14s→3s','search']] },
+      metrics:[['3K→200','incidents'],['4K','approvals'],['14s→3s','search']] },
     { title:'Deploy Automation', kicker:'intake to deployment', color:T.blue,
       body:'Rebuilt intake from email into tracked workflow, then pushed full automation.',
       metrics:[['45d→1d','cycle time'],['70%','automated'],['n8n+AI','engine']] },
@@ -588,6 +586,67 @@ function SceneSCA() {
   );
 }
 
+// ── SCENE 0 — SPLASH (before presentation begins) ────────────────
+function SceneSplash({ onStart }) {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 500),
+      setTimeout(() => setPh(2), 1300),
+      setTimeout(() => setPh(3), 2200),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div className="scene">
+      <div style={{ textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', gap:24 }}>
+
+        <div style={{
+          opacity: ph >= 1 ? 1 : 0, transition:'opacity .9s ease',
+          animation: ph >= 1 ? 'rise .85s cubic-bezier(.22,1,.36,1) both' : 'none',
+        }}>
+          <div className="gold-lbl" style={{ justifyContent:'center', marginBottom:10 }}>
+            DELL TECHNOLOGIES · SCA TPM
+          </div>
+          <div className="serif" style={{
+            fontSize:'clamp(22px,2.6vw,34px)', color:T.cream,
+            fontWeight:300, letterSpacing:'.06em', lineHeight:1.3,
+          }}>
+            Vishnu Pratap Kumar
+          </div>
+          <div className="lbl" style={{ marginTop:8, letterSpacing:'.2em' }}>MAY 2026</div>
+        </div>
+
+        {ph >= 2 && (
+          <div style={{
+            width:100, height:1,
+            background:`linear-gradient(to right,transparent,${T.gold},transparent)`,
+            transformOrigin:'center',
+            animation:'scaleIn .7s cubic-bezier(.22,1,.36,1) both',
+          }}/>
+        )}
+
+        {ph >= 3 && (
+          <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:13, animation:'fade 1s ease both' }}>
+            <div className="play-btn" onClick={onStart}>
+              <div style={{
+                width:0, height:0,
+                borderTop:'12px solid transparent', borderBottom:'12px solid transparent',
+                borderLeft:`20px solid ${T.gold}`,
+                marginLeft:5,
+              }}/>
+            </div>
+            <div className="lbl" style={{ letterSpacing:'.22em', fontSize:'clamp(7px,.8vw,9px)' }}>
+              PRESS SPACE · OR CLICK TO BEGIN
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── PROGRESS DOTS ─────────────────────────────────────────────────
 function ProgressDots({ scene }) {
   return (
@@ -626,6 +685,7 @@ function ProgressDots({ scene }) {
 const SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, SceneSCA];
 
 export default function App() {
+  const [started, setStarted] = useState(false);
   const [scene, setScene]     = useState(0);
   const [cutting, setCutting] = useState(false);
 
@@ -633,20 +693,25 @@ export default function App() {
     setCutting(true);
     setTimeout(() => { fn(); setCutting(false); }, 230);
   };
+  const handleStart = () => cut(() => setStarted(true));
   const next = () => cut(() => setScene(s => Math.min(s+1, SCENES.length-1)));
   const prev = () => cut(() => setScene(s => Math.max(s-1, 0)));
 
   useEffect(() => {
     const h = e => {
+      if (!started) {
+        if (e.key===' '||e.key==='Enter') { e.preventDefault(); handleStart(); }
+        return;
+      }
       if (e.key==='ArrowRight'||e.key===' ') { e.preventDefault(); next(); }
       if (e.key==='ArrowLeft')               { e.preventDefault(); prev(); }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, []); // eslint-disable-line
+  }, [started]); // eslint-disable-line
 
   const Scene = SCENES[scene];
-  const meta  = META[scene];
+  const meta  = started ? META[scene] : META[0];
   const chrome = 'rgba(237,233,224,.22)';
 
   return (
@@ -677,26 +742,36 @@ export default function App() {
         position:'fixed', inset:0, zIndex:1, pointerEvents:'none',
         backgroundImage:`url(${meta.bg})`,
         backgroundSize:'cover', backgroundPosition:'center',
-        opacity: scene===3 ? 0.52 : scene===4 ? 0.42 : 0.62,
-        transition:'opacity .4s ease',
+        opacity: !started ? 0.38 : scene===3 ? 0.52 : scene===4 ? 0.42 : 0.62,
+        transition:'opacity .6s ease',
       }}/>
 
       {/* Colored scrim */}
-      <div style={{ position:'fixed', inset:0, zIndex:2, pointerEvents:'none', background:meta.scrim, transition:'background .5s ease' }}/>
+      <div style={{
+        position:'fixed', inset:0, zIndex:2, pointerEvents:'none',
+        background: started ? meta.scrim : 'linear-gradient(160deg,rgba(0,0,0,.72) 0%,rgba(8,5,2,.92) 100%)',
+        transition:'background .5s ease',
+      }}/>
 
       {/* Scene transition flash */}
       {cutting && <div style={{ position:'fixed', inset:0, zIndex:950, background:'#000', pointerEvents:'none' }}/>}
 
-      {/* Active scene — key forces remount + animation reset */}
-      <div key={scene} style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .38s ease' }}>
-        <Scene onNext={next}/>
-      </div>
+      {/* Splash or active scene */}
+      {!started ? (
+        <div key="splash" style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .5s ease' }}>
+          <SceneSplash onStart={handleStart}/>
+        </div>
+      ) : (
+        <div key={scene} style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .38s ease' }}>
+          <Scene onNext={next}/>
+        </div>
+      )}
 
-      {/* Progress */}
-      <ProgressDots scene={scene}/>
+      {/* Progress — only after started */}
+      {started && <ProgressDots scene={scene}/>}
 
-      {/* Back */}
-      {scene > 0 && (
+      {/* Back — only after started */}
+      {started && scene > 0 && (
         <button onClick={e => { e.stopPropagation(); prev(); }} style={{
           position:'fixed', bottom:44, left:40, zIndex:600, cursor:'pointer',
           background:'transparent', border:`1px solid ${chrome}`,
