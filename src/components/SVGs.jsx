@@ -63,10 +63,10 @@ export function KnowledgeGraph({ phase = 5 }) {
   const EDGE_START_X = 210;
   
   const chaos = [
-    { x:62,  y:60,  m:"5,000+",  s:"INCIDENTS / QTR",     color:T.red,   icon:"alert",     d:0   },
+    { x:62,  y:60,  m:"3,000+",  s:"INCIDENTS / QTR",     color:T.red,   icon:"alert",     d:0   },
     { x:44,  y:160, m:"2 WEEKS", s:"MANUAL BUILD TIME",   color:T.amber, icon:"clock",     d:90  },
-    { x:74,  y:255, m:"ZERO",    s:"SOFTWARE VISIBILITY", color:T.cream, icon:"eye",       d:180 },
-    { x:44,  y:350, m:"EMAIL",   s:"CHAINS / REQUEST",    color:T.muted, icon:"mail",      d:270 },
+    { x:74,  y:255, m:"ZERO",    s:"SOFTWARE VISIBILITY", color:T.red,   icon:"eye",       d:180 },
+    { x:44,  y:350, m:"EMAIL",   s:"CHAINS / REQUEST",    color:T.amber, icon:"mail",      d:270 },
     { x:68,  y:440, m:"45 DAYS", s:"AVG INTAKE TIME",     color:T.amber, icon:"hourglass", d:360 },
   ];
 
@@ -108,7 +108,7 @@ export function KnowledgeGraph({ phase = 5 }) {
       ))}
 
       {chaos.map((n, i) => {
-        const isTop = n.m === "5,000+";
+        const isTop = n.m === "3,000+";
         return (
           <g key={i} style={{ opacity: phase >= 1 ? 1 : 0, transition: `opacity 0.5s ease ${n.d}ms` }}>
             <g transform={`translate(${n.x}, ${n.y})`} opacity={isTop ? 1 : .75}>
@@ -122,7 +122,7 @@ export function KnowledgeGraph({ phase = 5 }) {
                 d={`M ${EDGE_START_X} ${n.y} C ${(EDGE_START_X + CX - CR) / 2 + 30} ${n.y} ${(EDGE_START_X + CX - CR) / 2 + 30} ${CY} ${CX - CR} ${CY}`} 
                 fill="none" 
                 stroke={`${n.color}90`} 
-                strokeWidth={n.m === "5,000+" ? 1.5 : 1}
+                strokeWidth={n.m === "3,000+" ? 1.5 : 1}
                 strokeDasharray={400}
                 strokeDashoffset={400}
                 style={{ animation: `drawPth 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${n.d}ms forwards` }}
@@ -138,7 +138,6 @@ export function KnowledgeGraph({ phase = 5 }) {
           <circle cx={CX} cy={CY} r={CR} fill="rgba(10,8,6,.97)" stroke={T.gold} strokeWidth={2} filter="url(#glo)"/>
           <text x={CX} y={CY - 11} textAnchor="middle" fontFamily="Cormorant Garamond" fontWeight={700} fontSize={24} fill={T.gold}>60 DAYS</text>
           <text x={CX} y={CY + 8} textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={8} letterSpacing={2.5} fill="rgba(201,169,110,.55)">FIELD RESEARCH</text>
-          <text x={CX} y={CY + 24} textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={7} letterSpacing={1} fill="rgba(201,169,110,.28)">5K INCIDENTS · 60 INTERVIEWS</text>
         </g>
       )}
 

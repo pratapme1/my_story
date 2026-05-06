@@ -128,6 +128,7 @@ const META = [
   { bg:'/bg-story-prove.png',     scrim:'linear-gradient(160deg,rgba(15,35,90,.26) 0%,rgba(0,0,0,.86) 100%)',      label:'PROVE'  },
   { bg:'/bg-cinematic-build.png', scrim:'linear-gradient(160deg,rgba(5,12,70,.3) 0%,rgba(0,0,0,.84) 100%)',        label:'BUILD'  },
   { bg:'/bg-story-dash.png',      scrim:'linear-gradient(160deg,rgba(0,14,32,.42) 0%,rgba(0,0,0,.92) 100%)',       label:'SCA'    },
+  { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.62) 0%,rgba(8,5,2,.92) 100%)',         label:'END'    },
 ];
 
 // ── PARTICLE ATMOSPHERE ───────────────────────────────────────────
@@ -681,8 +682,58 @@ function ProgressDots({ scene }) {
   );
 }
 
+// ── SCENE 6 — THANK YOU ───────────────────────────────────────────
+function SceneClose() {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 400),
+      setTimeout(() => setPh(2), 1300),
+      setTimeout(() => setPh(3), 2200),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div className="scene">
+      <div style={{ textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', gap:28 }}>
+
+        <div style={{
+          overflow:'hidden',
+          opacity: ph >= 1 ? 1 : 0, transition:'opacity .7s ease',
+        }}>
+          <div className="serif" style={{
+            fontSize:'clamp(52px,9vw,120px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.05, letterSpacing:'-.01em',
+            animation: ph >= 1 ? 'rise .9s cubic-bezier(.22,1,.36,1) both' : 'none',
+          }}>
+            Thank you.
+          </div>
+        </div>
+
+        {ph >= 2 && (
+          <div style={{
+            width:'clamp(80px,12vw,140px)', height:1,
+            background:`linear-gradient(to right,transparent,${T.gold},transparent)`,
+            transformOrigin:'center',
+            animation:'scaleIn .8s cubic-bezier(.22,1,.36,1) both',
+          }}/>
+        )}
+
+        {ph >= 3 && (
+          <div style={{ animation:'rise .7s cubic-bezier(.22,1,.36,1) both' }}>
+            <div className="gold-lbl" style={{ justifyContent:'center', marginBottom:8 }}>VISHNU PRATAP KUMAR</div>
+            <div className="lbl" style={{ letterSpacing:'.18em' }}>DELL TECHNOLOGIES · SCA TPM · MAY 2026</div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
+
 // ── ROOT ──────────────────────────────────────────────────────────
-const SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, SceneSCA];
+const SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, SceneSCA, SceneClose];
 
 export default function App() {
   const [started, setStarted] = useState(false);
@@ -742,7 +793,7 @@ export default function App() {
         position:'fixed', inset:0, zIndex:1, pointerEvents:'none',
         backgroundImage:`url(${meta.bg})`,
         backgroundSize:'cover', backgroundPosition:'center',
-        opacity: !started ? 0.38 : scene===3 ? 0.52 : scene===4 ? 0.42 : 0.62,
+        opacity: !started ? 0.38 : scene===3 ? 0.52 : scene===4 ? 0.42 : scene===5 ? 0.35 : 0.62,
         transition:'opacity .6s ease',
       }}/>
 
