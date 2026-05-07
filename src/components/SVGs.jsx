@@ -191,25 +191,40 @@ export function ServerAdditions({ phase = 4 }) {
         />
       ))}
 
-      {stages.map((s, i) => phase >= i + 1 && (
-        <g key={i} style={{ animation:`nodeIn 0.45s ease both` }}>
-          <circle cx={s.x} cy={CY} r={R * 1.9} fill={`${s.color}07`}
-            style={{ animation:"pulseGlow 3.5s ease-in-out infinite" }}/>
-          <circle cx={s.x} cy={CY} r={R} fill="rgba(10,8,6,.97)"
-            stroke={s.color} strokeWidth={1.8} filter="url(#saglo)"/>
-          <text x={s.x} y={CY - 8} textAnchor="middle"
-            fontFamily="IBM Plex Mono" fontSize={7} letterSpacing={1}
-            fill={`${s.color}55`}>{String(i+1).padStart(2,'0')}</text>
-          <text x={s.x} y={CY + 9} textAnchor="middle"
-            fontFamily="IBM Plex Mono" fontSize={9} fontWeight="500" letterSpacing={2}
-            fill={s.color} filter="url(#sagloXs)">{s.label}</text>
-          {s.steps.map((step, j) => (
-            <text key={j} x={s.x} y={CY + R + 20 + j * 15}
-              textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={7.5}
-              letterSpacing={0.3} fill="rgba(237,233,224,.72)">{step}</text>
-          ))}
-        </g>
-      ))}
+      {stages.map((s, i) => {
+        const words = s.label.split(' ');
+        const multiLine = words.length > 1;
+        return phase >= i + 1 && (
+          <g key={i} style={{ animation:`nodeIn 0.45s ease both` }}>
+            <circle cx={s.x} cy={CY} r={R * 1.9} fill={`${s.color}07`}
+              style={{ animation:"pulseGlow 3.5s ease-in-out infinite" }}/>
+            <circle cx={s.x} cy={CY} r={R} fill="rgba(10,8,6,.97)"
+              stroke={s.color} strokeWidth={1.8} filter="url(#saglo)"/>
+            <text x={s.x} y={CY - 8} textAnchor="middle"
+              fontFamily="IBM Plex Mono" fontSize={7} letterSpacing={1}
+              fill={`${s.color}55`}>{String(i+1).padStart(2,'0')}</text>
+            {multiLine ? (
+              <>
+                <text x={s.x} y={CY + 3} textAnchor="middle"
+                  fontFamily="IBM Plex Mono" fontSize={8} fontWeight="500" letterSpacing={1.5}
+                  fill={s.color} filter="url(#sagloXs)">{words[0]}</text>
+                <text x={s.x} y={CY + 14} textAnchor="middle"
+                  fontFamily="IBM Plex Mono" fontSize={8} fontWeight="500" letterSpacing={1.5}
+                  fill={s.color} filter="url(#sagloXs)">{words[1]}</text>
+              </>
+            ) : (
+              <text x={s.x} y={CY + 9} textAnchor="middle"
+                fontFamily="IBM Plex Mono" fontSize={9} fontWeight="500" letterSpacing={2}
+                fill={s.color} filter="url(#sagloXs)">{s.label}</text>
+            )}
+            {s.steps.map((step, j) => (
+              <text key={j} x={s.x} y={CY + R + 20 + j * 15}
+                textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={7.5}
+                letterSpacing={0.3} fill="rgba(237,233,224,.72)">{step}</text>
+            ))}
+          </g>
+        );
+      })}
     </svg>
   );
 }

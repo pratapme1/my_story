@@ -309,7 +309,7 @@ function SceneProve({ onNext }) {
               fontSize:'clamp(22px,3.2vw,44px)', fontWeight:300, fontStyle:'italic',
               color:T.cream, lineHeight:1.12,
             }}>
-              I built the governance layer,<br/>not just the tool.
+              Execution is easy.<br/>Governance — ownership, exceptions, verification — is what breaks at scale.
             </div>
           </div>
         )}
@@ -374,8 +374,8 @@ function SceneBuild({ onNext }) {
 
   const agentLifecycle = [
     { tag:'DEVELOP', color:T.blue,
-      title:'Linux agent build',
-      detail:'Identify target distros — RHEL, Ubuntu, SLES. Build and unit test in a local Linux dev environment before touching any server.' },
+      title:'Governance layer, not a new tool',
+      detail:'Wraps existing execution tooling — SNOW, Ansible, or native package managers. The agent enforces policy, ownership, and audit. It does not replace what already runs.' },
     { tag:'VALIDATE', color:T.amber,
       title:'Staging + sign-off',
       detail:'Test on non-production servers first. Review with server ops and change advisory before any production ring. No expansion without documented approval.' },
