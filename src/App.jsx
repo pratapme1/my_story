@@ -26,18 +26,19 @@ const CSS = `
 html,body,#root { height:100%; overflow:hidden; }
 body { background:#000; color:#EDE9E0; font-family:system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
 
-.serif { font-family:'Cormorant Garamond',serif; }
-.mono  { font-family:'IBM Plex Mono',monospace; }
+.serif { font-family:'Cormorant Garamond',serif; text-shadow:0 1px 14px rgba(0,0,0,.9),0 3px 32px rgba(0,0,0,.65); }
+.mono  { font-family:'IBM Plex Mono',monospace; text-shadow:0 1px 8px rgba(0,0,0,.85); }
 
 .lbl {
   font-family:'IBM Plex Mono',monospace;
   font-size:clamp(7.5px,.85vw,10px); letter-spacing:.2em; text-transform:uppercase;
-  color:rgba(237,233,224,.34);
+  color:rgba(237,233,224,.55); text-shadow:0 1px 8px rgba(0,0,0,.9);
 }
 .gold-lbl {
   font-family:'IBM Plex Mono',monospace; font-size:clamp(7.5px,.85vw,9.5px);
   letter-spacing:.22em; text-transform:uppercase; color:#C9A96E;
   display:flex; align-items:center; gap:8px; margin-bottom:10px;
+  text-shadow:0 1px 8px rgba(0,0,0,.9);
 }
 .gold-lbl::before {
   content:''; width:4px; height:4px; border-radius:50%;
@@ -82,11 +83,11 @@ body { background:#000; color:#EDE9E0; font-family:system-ui,sans-serif; -webkit
 
 /* Glass card */
 .card {
-  background:rgba(6,6,10,.84); backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border:1px solid rgba(237,233,224,.1); border-radius:8px;
+  background:rgba(4,4,8,.92); backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(237,233,224,.13); border-radius:8px;
   padding:clamp(14px,1.8vw,22px); position:relative; overflow:hidden;
-  box-shadow:0 16px 40px rgba(0,0,0,.55);
+  box-shadow:0 16px 48px rgba(0,0,0,.7);
   transition:opacity .45s ease, transform .45s ease;
 }
 
@@ -112,9 +113,9 @@ body { background:#000; color:#EDE9E0; font-family:system-ui,sans-serif; -webkit
 // ── SCENE METADATA ────────────────────────────────────────────────
 const META = [
   { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(8,5,2,.78) 100%)',         label:'OPEN'   },
-  { bg:'/bg-story-search.png',    scrim:'linear-gradient(160deg,rgba(75,40,5,.26) 0%,rgba(0,0,0,.84) 100%)',       label:'SEARCH' },
-  { bg:'/bg-story-prove.png',     scrim:'linear-gradient(160deg,rgba(15,35,90,.26) 0%,rgba(0,0,0,.86) 100%)',      label:'PROVE'  },
-  { bg:'/bg-cinematic-build.png', scrim:'linear-gradient(160deg,rgba(5,12,70,.3) 0%,rgba(0,0,0,.84) 100%)',        label:'BUILD'  },
+  { bg:'/bg-story-search.png',    scrim:'linear-gradient(160deg,rgba(75,40,5,.44) 0%,rgba(0,0,0,.92) 100%)',       label:'SEARCH' },
+  { bg:'/bg-story-prove.png',     scrim:'linear-gradient(160deg,rgba(15,35,90,.44) 0%,rgba(0,0,0,.94) 100%)',      label:'PROVE'  },
+  { bg:'/bg-cinematic-build.png', scrim:'linear-gradient(160deg,rgba(5,12,70,.46) 0%,rgba(0,0,0,.94) 100%)',       label:'BUILD'  },
   { bg:'/bg-story-dash.png',      scrim:'linear-gradient(160deg,rgba(0,14,32,.42) 0%,rgba(0,0,0,.92) 100%)',       label:'PLAN'   },
   { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.62) 0%,rgba(8,5,2,.92) 100%)',         label:'END'    },
 ];
@@ -321,7 +322,7 @@ function SceneProve({ onNext }) {
             gap:'clamp(20px,3.5vw,52px)', flexWrap:'wrap',
             margin:'clamp(8px,1.4vh,14px) 0', animation:'fade .5s ease both',
           }}>
-            {[['98K','endpoints'],['200K+','removals'],['3K+','titles'],['Windows + Linux','platforms']].map(([val, label]) => (
+            {[['98K','endpoints'],['200K+','removals'],['3K+','software titles'],['Windows','platform']].map(([val, label]) => (
               <div key={label} style={{ textAlign:'center' }}>
                 <div className="serif" style={{ fontSize:'clamp(17px,2vw,26px)', color:T.gold, fontWeight:700, lineHeight:1 }}>{val}</div>
                 <div className="lbl" style={{ marginTop:4 }}>{label}</div>
@@ -376,8 +377,8 @@ function SceneBuild({ onNext }) {
       title:'Linux agent build',
       detail:'Identify target distros — RHEL, Ubuntu, SLES. Build and unit test in a local Linux dev environment before touching any server.' },
     { tag:'VALIDATE', color:T.amber,
-      title:'SRE test + Go / No-Go',
-      detail:'Validation gate with the SRE team. Full stakeholder checkpoint before any deployment — scale and blast radius demand it.' },
+      title:'Staging + sign-off',
+      detail:'Test on non-production servers first. Review with server ops and change advisory before any production ring. No expansion without documented approval.' },
     { tag:'DEPLOY', color:T.green,
       title:'Ring-based deployment',
       detail:'PoC (5 servers) → Pilot ring → Full production. Sign-off required at each expansion. Rollback plan active throughout.' },
@@ -442,36 +443,36 @@ function ScenePlan() {
   const phases = [
     {
       num:'01', time:'Week 1 – 2', theme:'SEARCH', color:T.gold,
-      title:'Map before I\ntouch anything.',
+      title:'Discover before\nI configure anything.',
       bullets:[
-        'Shadow server ops, SRE, and security stakeholders',
-        'Map server landscape — inventory sources, ownership gaps, policy state',
-        'Document existing governance: what exists, what\'s missing, what\'s broken',
-        'No opinions yet. Only observations.',
+        'SNOW + CMDB: map installed vs. approved software on servers',
+        'Shadow server ops, change advisory, and security stakeholders',
+        'Understand existing CAB process and change window schedules',
+        'Identify the highest-risk gap — ownership, inventory, or policy drift',
       ],
-      deliverable:'Server landscape map · governance gap assessment',
+      deliverable:'Server landscape map · top governance gap identified',
     },
     {
       num:'02', time:'Month 1', theme:'PROVE', color:T.blue,
-      title:'Own one gap.\nClose it.',
+      title:'One gap. One\nworking component.',
       bullets:[
-        'Pick the highest-impact governance gap — data-backed',
-        'Build a working solution, not a deck describing one',
-        'Show it live before asking for scope or resources',
-        'Use the proof to earn the next level of ownership',
+        'Pick the highest-risk gap from discovery',
+        'Build the governance layer for it — DISCOVER or GOVERN stage first',
+        'PoC on 5 servers: IMPACT assessed, CAB approval, change window respected',
+        'Show results before asking for broader scope',
       ],
-      deliverable:'One visible server governance improvement live',
+      deliverable:'First server governance component live · PoC evidence',
     },
     {
       num:'03', time:'Month 2 – 3', theme:'BUILD', color:T.green,
-      title:'First platform\nproof point.',
+      title:'First full\nremoval campaign.',
       bullets:[
-        'First server governance component in production',
-        'Ring-based removal campaign — PoC → Pilot → Full',
-        'Align SRE, ops, and leadership on a 6-month roadmap',
-        'Measure: drift reduced, licenses reclaimed, risk visible',
+        'Full pipeline live: IMPACT → CAB → CHANGE WINDOW → ROLLBACK',
+        'Ring expansion: 5 servers → pilot ring → broader scope',
+        'Web app visibility: campaign status, owner alerts, audit trail',
+        'Establish a repeatable server governance cadence',
       ],
-      deliverable:'Server governance platform v1 · aligned roadmap',
+      deliverable:'First campaign complete · ring process established',
     },
   ];
 
@@ -488,7 +489,7 @@ function ScenePlan() {
                 fontSize:'clamp(26px,3.8vw,52px)', fontWeight:300, fontStyle:'italic',
                 color:T.cream, lineHeight:1.1,
               }}>
-                First 90 days.<br/><span style={{ color:T.gold }}>Server governance. Applied.</span>
+                First 90 days.<br/><span style={{ color:T.gold }}>Your pipeline. Running on servers.</span>
               </div>
               <div className="lbl" style={{ lineHeight:1.9, textAlign:'right' }}>
                 SEARCH → PROVE → BUILD<br/>same method. new platform.
@@ -555,8 +556,8 @@ function ScenePlan() {
               fontSize:'clamp(17px,2.1vw,26px)', fontStyle:'italic',
               color:T.cream, lineHeight:1.5,
             }}>
-              "Give me one hard server problem.<br/>
-              I'll come back in 30 days with governance around it."
+              "Show me your highest-risk server gap.<br/>
+              I'll have governance around it in 30 days."
             </div>
             <div style={{ textAlign:'right' }}>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6, justifyContent:'flex-end' }}>
@@ -786,7 +787,7 @@ export default function App() {
         position:'fixed', inset:0, zIndex:1, pointerEvents:'none',
         backgroundImage:`url(${meta.bg})`,
         backgroundSize:'cover', backgroundPosition:'center',
-        opacity: !started ? 0.38 : scene===3 ? 0.52 : scene===4 ? 0.42 : scene===5 ? 0.35 : 0.62,
+        opacity: !started ? 0.38 : scene===1 ? 0.38 : scene===2 ? 0.38 : scene===3 ? 0.42 : scene===4 ? 0.38 : scene===5 ? 0.32 : 0.58,
         transition:'opacity .6s ease',
       }}/>
 
