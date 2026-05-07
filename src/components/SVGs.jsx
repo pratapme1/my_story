@@ -167,8 +167,8 @@ export function KnowledgeGraph({ phase = 5 }) {
             <path key={i} d={`M ${ins.x + 212} ${ins.y} C 880 ${ins.y} 890 ${OY} ${OX - 66} ${OY}`} fill="none" stroke={`${T.gold}40`} strokeWidth={1} strokeDasharray={400} strokeDashoffset={400} style={{ animation: `drawPth 0.7s ease ${i * 80}ms forwards` }} />
           ))}
           <circle cx={OX} cy={OY} r={60} fill="rgba(10,8,6,.97)" stroke={T.gold} strokeWidth={2} style={{ animation: "fade 0.5s ease 0.4s both" }} filter="url(#glo)"/>
-          <text x={OX} y={OY - 18} textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={8} letterSpacing={2.5} fill="rgba(237,233,224,.38)" style={{ animation: "fade 0.4s ease 0.55s both" }}>ONE PLATFORM</text>
-          <text x={OX} y={OY + 8} textAnchor="middle" fontFamily="Cormorant Garamond" fontWeight={700} fontSize={28} fill={T.gold} filter="url(#gloXs)" style={{ animation: "fade 0.5s ease 0.6s both" }}>$400M</text>
+          <text x={OX} y={OY - 18} textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={8} letterSpacing={2.5} fill="rgba(237,233,224,.38)" style={{ animation: "fade 0.4s ease 0.55s both" }}>SW IN DELL</text>
+          <text x={OX} y={OY + 8} textAnchor="middle" fontFamily="Cormorant Garamond" fontWeight={700} fontSize={28} fill={T.gold} filter="url(#gloXs)" style={{ animation: "fade 0.5s ease 0.6s both" }}>&lt;1K</text>
           <text x={OX} y={OY + 26} textAnchor="middle" fontFamily="IBM Plex Mono" fontSize={7} letterSpacing={1.5} fill="rgba(237,233,224,.3)" style={{ animation: "fade 0.4s ease 0.7s both" }}>CIO VISION</text>
         </g>
       )}
