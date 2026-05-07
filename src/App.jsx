@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { motion } from 'framer-motion';
-import { KnowledgeGraph, ProofConstellation, BuildHubDiagram, WorkstreamSignal } from './components/SVGs';
+import { KnowledgeGraph, GovernancePipeline, ServerAdditions } from './components/SVGs';
 
 // ── TOKENS ────────────────────────────────────────────────────────
 const T = {
@@ -80,18 +80,6 @@ body { background:#000; color:#EDE9E0; font-family:system-ui,sans-serif; -webkit
 @media (max-width:960px)  { .grid-3 { grid-template-columns:1fr 1fr; } }
 @media (max-width:640px)  { .grid-3,.grid-2 { grid-template-columns:1fr; } }
 
-/* SCA mapping table */
-.sca-row {
-  display:grid;
-  grid-template-columns:clamp(130px,16%,190px) 1fr clamp(110px,14%,150px);
-  gap:clamp(10px,1.5vw,18px);
-  align-items:start;
-}
-@media (max-width:860px) {
-  .sca-row { grid-template-columns:clamp(110px,16%,160px) 1fr; }
-  .sca-impact { display:none; }
-}
-
 /* Glass card */
 .card {
   background:rgba(6,6,10,.84); backdrop-filter:blur(14px);
@@ -127,7 +115,7 @@ const META = [
   { bg:'/bg-story-search.png',    scrim:'linear-gradient(160deg,rgba(75,40,5,.26) 0%,rgba(0,0,0,.84) 100%)',       label:'SEARCH' },
   { bg:'/bg-story-prove.png',     scrim:'linear-gradient(160deg,rgba(15,35,90,.26) 0%,rgba(0,0,0,.86) 100%)',      label:'PROVE'  },
   { bg:'/bg-cinematic-build.png', scrim:'linear-gradient(160deg,rgba(5,12,70,.3) 0%,rgba(0,0,0,.84) 100%)',        label:'BUILD'  },
-  { bg:'/bg-story-dash.png',      scrim:'linear-gradient(160deg,rgba(0,14,32,.42) 0%,rgba(0,0,0,.92) 100%)',       label:'SCA'    },
+  { bg:'/bg-story-dash.png',      scrim:'linear-gradient(160deg,rgba(0,14,32,.42) 0%,rgba(0,0,0,.92) 100%)',       label:'PLAN'   },
   { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.62) 0%,rgba(8,5,2,.92) 100%)',         label:'END'    },
 ];
 
@@ -251,11 +239,11 @@ function SceneSearch({ onNext }) {
   const [ph, setPh] = useState(0);
   useEffect(() => {
     const ts = [
-      setTimeout(() => setPh(1), 350),
-      setTimeout(() => setPh(2), 1000),
-      setTimeout(() => setPh(3), 2800),
-      setTimeout(() => setPh(4), 4800),
-      setTimeout(() => setPh(5), 6600),
+      setTimeout(() => setPh(1), 350),   // header + client nodes
+      setTimeout(() => setPh(2), 1100),  // center node + paths from client
+      setTimeout(() => setPh(3), 2400),  // server questions stagger in
+      setTimeout(() => setPh(4), 4200),  // all questions visible
+      setTimeout(() => setPh(5), 5000),  // click hint
     ];
     return () => ts.forEach(clearTimeout);
   }, []);
@@ -290,54 +278,77 @@ function SceneProve({ onNext }) {
   const [ph, setPh] = useState(0);
   useEffect(() => {
     const ts = [
-      setTimeout(() => setPh(1), 250),
-      setTimeout(() => setPh(2), 900),
-      setTimeout(() => setPh(3), 1700),
-      setTimeout(() => setPh(4), 2500),
-      setTimeout(() => setPh(5), 3300),
+      setTimeout(() => setPh(1), 300),   // header + DISCOVER
+      setTimeout(() => setPh(2), 1000),  // GOVERN
+      setTimeout(() => setPh(3), 1800),  // EXECUTE
+      setTimeout(() => setPh(4), 2600),  // VERIFY
+      setTimeout(() => setPh(5), 3500),  // scale stats
+      setTimeout(() => setPh(6), 4400),  // web app cards
     ];
     return () => ts.forEach(clearTimeout);
   }, []);
 
-  const items = [
-    { tag:'CATALOG', title:'Live VP demo', detail:'Built the complete Software Catalog from scratch. Demoed it live to the VP. Earned development approval in under 60 days.', color:T.gold, show:ph>=2 },
-    { tag:'AUTOMATION', title:'n8n + AI PoC', detail:'Used n8n + LLM to prove software intake could be fully automated. Built it in a weekend. Enterprise rollout approved.', color:T.blue, show:ph>=3 },
-    { tag:'COMPLIANCE', title:'Silent removal at scale', detail:'Redesigned the Windows removal agent for server-controlled, silent removal across 100K+ endpoints — plus a Linux PoC.', color:T.green, show:ph>=4 },
+  const webApp = [
+    { title:'ADMIN VIEW',  color:T.gold,
+      items:['Campaign management','Bulk removal control','Policy configuration','Exception approvals'] },
+    { title:'OWNER VIEW',  color:T.blue,
+      items:['Scheduled removals','Raise exception + justification','Self-service cleanup','Removal history'] },
+    { title:'MONITORING',  color:T.green,
+      items:['Real-time status','Detailed logging','Audit trail','License reclamation'] },
   ];
 
   return (
-    <div className="scene" onClick={onNext}>
+    <div className="scene-scroll" onClick={onNext}>
       <div className="inner">
-        <motion.div initial="hidden" animate="visible" variants={stagger} style={{ marginBottom:'clamp(16px,2.5vh,28px)' }}>
-          <motion.div variants={fadeUp} className="gold-lbl">02 // PROVE · THE INVENTOR</motion.div>
-          <motion.div variants={fadeUp} className="serif" style={{
-            fontSize:'clamp(24px,3.6vw,50px)', fontWeight:300, fontStyle:'italic',
-            color:T.cream, lineHeight:1.12,
-          }}>
-            I don't ask for belief.<br/>I put proof on the table.
-          </motion.div>
-        </motion.div>
 
-        <div className="grid-2" style={{ alignItems:'start' }}>
-          <div style={{ display:'flex', flexDirection:'column', gap:'clamp(10px,1.4vh,14px)' }}>
-            {items.map((item, i) => (
-              <div key={i} className="card" style={{
-                opacity: item.show ? 1 : 0,
-                transform: item.show ? 'translateX(0)' : 'translateX(-16px)',
-                borderLeft:`4px solid ${item.color}`,
-              }}>
-                <div className="lbl" style={{ color:item.color, marginBottom:7 }}>{item.tag}</div>
-                <div className="serif" style={{ fontSize:'clamp(16px,1.7vw,21px)', fontWeight:700, color:T.cream, marginBottom:8, lineHeight:1.2 }}>{item.title}</div>
-                <div style={{ fontSize:'clamp(11px,1.2vw,13px)', color:T.muted, lineHeight:1.7 }}>{item.detail}</div>
+        {ph >= 1 && (
+          <div style={{ marginBottom:'clamp(10px,1.8vh,18px)', animation:'rise .5s ease both' }}>
+            <div className="gold-lbl">02 // PROVE · BUILT AT SCALE</div>
+            <div className="serif" style={{
+              fontSize:'clamp(22px,3.2vw,44px)', fontWeight:300, fontStyle:'italic',
+              color:T.cream, lineHeight:1.12,
+            }}>
+              I built the governance layer,<br/>not just the tool.
+            </div>
+          </div>
+        )}
+
+        <GovernancePipeline phase={ph}/>
+
+        {ph >= 5 && (
+          <div style={{
+            display:'flex', alignItems:'center', justifyContent:'center',
+            gap:'clamp(20px,3.5vw,52px)', flexWrap:'wrap',
+            margin:'clamp(8px,1.4vh,14px) 0', animation:'fade .5s ease both',
+          }}>
+            {[['98K','endpoints'],['200K+','removals'],['3K+','titles'],['Windows + Linux','platforms']].map(([val, label]) => (
+              <div key={label} style={{ textAlign:'center' }}>
+                <div className="serif" style={{ fontSize:'clamp(17px,2vw,26px)', color:T.gold, fontWeight:700, lineHeight:1 }}>{val}</div>
+                <div className="lbl" style={{ marginTop:4 }}>{label}</div>
               </div>
             ))}
           </div>
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <ProofConstellation phase={ph}/>
-          </div>
-        </div>
+        )}
 
-        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .6s ease both' }}>
+        {ph >= 6 && (
+          <div className="grid-3" style={{ animation:'rise .6s ease both' }}>
+            {webApp.map((w, i) => (
+              <div key={i} className="card" style={{ borderTop:`3px solid ${w.color}` }}>
+                <div className="gold-lbl" style={{ color:w.color, marginBottom:10 }}>{w.title}</div>
+                <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:7 }}>
+                  {w.items.map((item, j) => (
+                    <li key={j} style={{ display:'flex', gap:7, alignItems:'flex-start' }}>
+                      <span style={{ color:w.color, flexShrink:0, fontSize:7, marginTop:3, lineHeight:1 }}>▸</span>
+                      <span style={{ fontSize:'clamp(10px,1.1vw,12px)', color:T.muted, lineHeight:1.65 }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={{ marginTop:12, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
           <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
           <div className="lbl">CLICK TO CONTINUE →</div>
         </div>
@@ -351,78 +362,61 @@ function SceneBuild({ onNext }) {
   const [ph, setPh] = useState(0);
   useEffect(() => {
     const ts = [
-      setTimeout(() => setPh(1), 400),
-      setTimeout(() => setPh(2), 1200),
-      setTimeout(() => setPh(3), 2000),
+      setTimeout(() => setPh(1), 300),   // header + IMPACT
+      setTimeout(() => setPh(2), 1000),  // CAB GATE
+      setTimeout(() => setPh(3), 1700),  // WINDOWS
+      setTimeout(() => setPh(4), 2400),  // ROLLBACK
+      setTimeout(() => setPh(5), 3300),  // agent lifecycle cards
     ];
     return () => ts.forEach(clearTimeout);
   }, []);
 
-  const streams = [
-    { title:'Software Catalog', kicker:'employee experience', color:T.gold,
-      body:'One landing place for employees, SAM, owners, admins, and approvers.',
-      metrics:[['3K→200','incidents'],['4K','approvals'],['14s→3s','search']] },
-    { title:'Deploy Automation', kicker:'intake to deployment', color:T.blue,
-      body:'Rebuilt intake from email into tracked workflow, then pushed full automation.',
-      metrics:[['45d→1d','cycle time'],['70%','automated'],['n8n+AI','engine']] },
-    { title:'Removal Agent', kicker:'compliance at scale', color:T.green,
-      body:'Server-controlled silent removals. Windows and Linux. 98K global endpoints.',
-      metrics:[['200K+','removed'],['98K','endpoints'],['3K+','titles']] },
+  const agentLifecycle = [
+    { tag:'DEVELOP', color:T.blue,
+      title:'Linux agent build',
+      detail:'Identify target distros — RHEL, Ubuntu, SLES. Build and unit test in a local Linux dev environment before touching any server.' },
+    { tag:'VALIDATE', color:T.amber,
+      title:'SRE test + Go / No-Go',
+      detail:'Validation gate with the SRE team. Full stakeholder checkpoint before any deployment — scale and blast radius demand it.' },
+    { tag:'DEPLOY', color:T.green,
+      title:'Ring-based deployment',
+      detail:'PoC (5 servers) → Pilot ring → Full production. Sign-off required at each expansion. Rollback plan active throughout.' },
   ];
 
   return (
     <div className="scene-scroll" onClick={onNext}>
       <div className="inner">
-        <motion.div initial="hidden" animate="visible" variants={stagger}
-          style={{ marginBottom:'clamp(16px,2.5vh,28px)', textAlign:'center' }}>
-          <motion.div variants={fadeUp} className="gold-lbl" style={{ justifyContent:'center' }}>03 // BUILD · THE ARCHITECT</motion.div>
-          <motion.div variants={fadeUp} className="serif" style={{
-            fontSize:'clamp(24px,3.5vw,50px)', fontWeight:300, fontStyle:'italic',
-            color:T.cream, lineHeight:1.12,
-          }}>
-            Three parallel workstreams.<br/>Executed simultaneously.
-          </motion.div>
-        </motion.div>
 
-        <div className="grid-3" style={{ marginBottom:'clamp(12px,1.8vh,18px)' }}>
-          {streams.map((w, i) => (
-            <div key={w.title} className="card" style={{
-              borderTop:`4px solid ${w.color}`,
-              opacity: ph >= i+1 ? 1 : 0,
-              transform: ph >= i+1 ? 'translateY(0)' : 'translateY(18px)',
+        {ph >= 1 && (
+          <div style={{ marginBottom:'clamp(10px,1.8vh,18px)', animation:'rise .5s ease both' }}>
+            <div className="gold-lbl">03 // BUILD · THE PLATFORM</div>
+            <div className="serif" style={{
+              fontSize:'clamp(22px,3.2vw,44px)', fontWeight:300, fontStyle:'italic',
+              color:T.cream, lineHeight:1.12,
             }}>
-              <div className="lbl" style={{ color:w.color, marginBottom:8 }}>{w.kicker}</div>
-              <div className="serif" style={{ fontSize:'clamp(16px,1.8vw,22px)', fontWeight:700, lineHeight:1.1, marginBottom:10, color:T.cream }}>{w.title}</div>
-              <WorkstreamSignal color={w.color}/>
-              <p style={{ fontSize:'clamp(11px,1.2vw,13px)', color:T.muted, lineHeight:1.65, marginBottom:14, minHeight:44 }}>{w.body}</p>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:8 }}>
-                {w.metrics.map(([val, label]) => (
-                  <div key={label}>
-                    <div className="serif" style={{ fontSize:'clamp(13px,1.4vw,17px)', color:w.color, fontWeight:700, lineHeight:1 }}>{val}</div>
-                    <div className="lbl" style={{ fontSize:7.5, marginTop:2 }}>{label}</div>
-                  </div>
-                ))}
-              </div>
+              Same governance.<br/>New environment. Higher stakes.
             </div>
-          ))}
-        </div>
-
-        <div className="card" style={{ animation:'rise .6s ease .3s both' }}>
-          <div className="grid-2" style={{ alignItems:'center' }}>
-            <div>
-              <div className="gold-lbl" style={{ marginBottom:10 }}>MY USP · END-TO-END OWNERSHIP</div>
-              <div className="serif" style={{ fontSize:'clamp(18px,2.2vw,28px)', lineHeight:1.15, color:T.cream, fontWeight:700, marginBottom:12 }}>
-                Single point of contact across VP, engineering, security, and operations.
-              </div>
-              <p style={{ fontSize:'clamp(11px,1.3vw,13.5px)', color:T.muted, lineHeight:1.65 }}>
-                Drove prioritization, vision, issue fixes, approvals and delivery rhythm — including the critical search latency fix from 14 seconds to 3 seconds.
-              </p>
-            </div>
-            <BuildHubDiagram phase={ph}/>
           </div>
-        </div>
+        )}
 
-        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+        <ServerAdditions phase={ph}/>
+
+        {ph >= 5 && (
+          <div className="grid-3" style={{ marginTop:'clamp(10px,1.8vh,16px)', animation:'rise .6s ease both' }}>
+            {agentLifecycle.map((a, i) => (
+              <div key={i} className="card" style={{ borderTop:`3px solid ${a.color}` }}>
+                <div className="lbl" style={{ color:a.color, marginBottom:8 }}>{a.tag}</div>
+                <div className="serif" style={{
+                  fontSize:'clamp(15px,1.7vw,20px)', fontWeight:700,
+                  color:T.cream, marginBottom:8, lineHeight:1.2,
+                }}>{a.title}</div>
+                <p style={{ fontSize:'clamp(10px,1.1vw,12px)', color:T.muted, lineHeight:1.65 }}>{a.detail}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={{ marginTop:12, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
           <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
           <div className="lbl">CLICK TO CONTINUE →</div>
         </div>
@@ -432,9 +426,7 @@ function SceneBuild({ onNext }) {
 }
 
 // ── SCENE 5 — FIRST 90 DAYS ───────────────────────────────────────
-// The closing argument: not a credentials recap — a concrete commitment.
-// Three phases mirror the SEARCH → PROVE → BUILD arc shown in slides 2–4.
-function SceneSCA() {
+function ScenePlan() {
   const [ph, setPh] = useState(0);
   useEffect(() => {
     const ts = [
@@ -450,36 +442,36 @@ function SceneSCA() {
   const phases = [
     {
       num:'01', time:'Week 1 – 2', theme:'SEARCH', color:T.gold,
-      title:'Listen before\nI touch anything.',
+      title:'Map before I\ntouch anything.',
       bullets:[
-        'Shadow every stakeholder — VP, engineering, security, ops',
-        'Map all open gaps, fires, and pending blockers',
-        'Understand the full SCA platform state end-to-end',
-        'No opinions yet. Only observations and questions.',
+        'Shadow server ops, SRE, and security stakeholders',
+        'Map server landscape — inventory sources, ownership gaps, policy state',
+        'Document existing governance: what exists, what\'s missing, what\'s broken',
+        'No opinions yet. Only observations.',
       ],
-      deliverable:'Gap map · stakeholder landscape · one priority hypothesis',
+      deliverable:'Server landscape map · governance gap assessment',
     },
     {
       num:'02', time:'Month 1', theme:'PROVE', color:T.blue,
-      title:'Own one hard\nproblem. Ship it.',
+      title:'Own one gap.\nClose it.',
       bullets:[
-        'Pick the highest-impact open issue — data-backed',
-        'Build a working fix, not a deck describing one',
-        'Show it to stakeholders before asking for anything',
-        'Use the proof to earn the next level of scope',
+        'Pick the highest-impact governance gap — data-backed',
+        'Build a working solution, not a deck describing one',
+        'Show it live before asking for scope or resources',
+        'Use the proof to earn the next level of ownership',
       ],
-      deliverable:'One visible improvement live in production',
+      deliverable:'One visible server governance improvement live',
     },
     {
       num:'03', time:'Month 2 – 3', theme:'BUILD', color:T.green,
       title:'First platform\nproof point.',
       bullets:[
-        'Deliver the first real SCA platform improvement',
-        'Establish cross-functional delivery rhythm',
-        'Align VP and engineering on a 6-month roadmap',
-        'Measure the delta — show what changed and why',
+        'First server governance component in production',
+        'Ring-based removal campaign — PoC → Pilot → Full',
+        'Align SRE, ops, and leadership on a 6-month roadmap',
+        'Measure: drift reduced, licenses reclaimed, risk visible',
       ],
-      deliverable:'Shipped feature · aligned 6-month roadmap',
+      deliverable:'Server governance platform v1 · aligned roadmap',
     },
   ];
 
@@ -490,16 +482,16 @@ function SceneSCA() {
         {/* Header */}
         {ph >= 1 && (
           <div style={{ marginBottom:'clamp(16px,2.5vh,26px)', animation:'rise .6s ease both' }}>
-            <div className="gold-lbl">04 // FOR · DELL SCA TPM</div>
+            <div className="gold-lbl">04 // SERVER PLATFORM · COMMITMENT</div>
             <div style={{ display:'flex', alignItems:'baseline', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
               <div className="serif" style={{
                 fontSize:'clamp(26px,3.8vw,52px)', fontWeight:300, fontStyle:'italic',
                 color:T.cream, lineHeight:1.1,
               }}>
-                First 90 days.<br/><span style={{ color:T.gold }}>Applied. Not promised.</span>
+                First 90 days.<br/><span style={{ color:T.gold }}>Server governance. Applied.</span>
               </div>
               <div className="lbl" style={{ lineHeight:1.9, textAlign:'right' }}>
-                SEARCH → PROVE → BUILD<br/>same method. new context.
+                SEARCH → PROVE → BUILD<br/>same method. new platform.
               </div>
             </div>
           </div>
@@ -512,6 +504,7 @@ function SceneSCA() {
               borderTop:`4px solid ${p.color}`,
               opacity: ph >= i+2 ? 1 : 0,
               transform: ph >= i+2 ? 'translateY(0)' : 'translateY(18px)',
+              transition:'opacity .5s ease, transform .5s ease',
             }}>
               {/* Ghost number */}
               <div className="serif" style={{
@@ -562,8 +555,8 @@ function SceneSCA() {
               fontSize:'clamp(17px,2.1vw,26px)', fontStyle:'italic',
               color:T.cream, lineHeight:1.5,
             }}>
-              "Give me one hard problem.<br/>
-              I'll come back in 30 days with proof."
+              "Give me one hard server problem.<br/>
+              I'll come back in 30 days with governance around it."
             </div>
             <div style={{ textAlign:'right' }}>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6, justifyContent:'flex-end' }}>
@@ -577,7 +570,7 @@ function SceneSCA() {
                   </React.Fragment>
                 ))}
               </div>
-              <div className="lbl" style={{ fontSize:7.5 }}>APPLIED TO SCA · NOT DESCRIBED</div>
+              <div className="lbl" style={{ fontSize:7.5 }}>APPLIED TO SERVERS · NOT DESCRIBED</div>
             </div>
           </div>
         </div>
@@ -608,7 +601,7 @@ function SceneSplash({ onStart }) {
           animation: ph >= 1 ? 'rise .85s cubic-bezier(.22,1,.36,1) both' : 'none',
         }}>
           <div className="gold-lbl" style={{ justifyContent:'center', marginBottom:10 }}>
-            DELL TECHNOLOGIES · SCA TPM
+            DELL TECHNOLOGIES · SERVER PLATFORM
           </div>
           <div className="serif" style={{
             fontSize:'clamp(22px,2.6vw,34px)', color:T.cream,
@@ -723,7 +716,7 @@ function SceneClose() {
         {ph >= 3 && (
           <div style={{ animation:'rise .7s cubic-bezier(.22,1,.36,1) both' }}>
             <div className="gold-lbl" style={{ justifyContent:'center', marginBottom:8 }}>VISHNU PRATAP KUMAR</div>
-            <div className="lbl" style={{ letterSpacing:'.18em' }}>DELL TECHNOLOGIES · SCA TPM · MAY 2026</div>
+            <div className="lbl" style={{ letterSpacing:'.18em' }}>DELL TECHNOLOGIES · SERVER PLATFORM · MAY 2026</div>
           </div>
         )}
 
@@ -733,7 +726,7 @@ function SceneClose() {
 }
 
 // ── ROOT ──────────────────────────────────────────────────────────
-const SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, SceneSCA, SceneClose];
+const SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, ScenePlan, SceneClose];
 
 export default function App() {
   const [started, setStarted] = useState(false);
