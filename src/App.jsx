@@ -285,6 +285,7 @@ function SceneProve({ onNext }) {
       setTimeout(() => setPh(4), 2600),  // VERIFY
       setTimeout(() => setPh(5), 3500),  // scale stats
       setTimeout(() => setPh(6), 4400),  // web app cards
+      setTimeout(() => setPh(7), 5400),  // LIVE NOW banner
     ];
     return () => ts.forEach(clearTimeout);
   }, []);
@@ -322,7 +323,7 @@ function SceneProve({ onNext }) {
             gap:'clamp(20px,3.5vw,52px)', flexWrap:'wrap',
             margin:'clamp(8px,1.4vh,14px) 0', animation:'fade .5s ease both',
           }}>
-            {[['98K','endpoints'],['200K+','removals'],['3K+','software titles'],['Windows','platform']].map(([val, label]) => (
+            {[['98K','endpoints'],['200K+','removals'],['3K+','software titles'],['Windows + Linux','RHEL · Ubuntu']].map(([val, label]) => (
               <div key={label} style={{ textAlign:'center' }}>
                 <div className="serif" style={{ fontSize:'clamp(17px,2vw,26px)', color:T.gold, fontWeight:700, lineHeight:1 }}>{val}</div>
                 <div className="lbl" style={{ marginTop:4 }}>{label}</div>
@@ -346,6 +347,50 @@ function SceneProve({ onNext }) {
                 </ul>
               </div>
             ))}
+          </div>
+        )}
+
+        {ph >= 7 && (
+          <div className="card" style={{
+            borderTop:`3px solid ${T.green}`,
+            background:`linear-gradient(135deg,rgba(52,211,153,.06),rgba(0,0,0,.5))`,
+            borderColor:`rgba(52,211,153,.22)`,
+            marginTop:'clamp(8px,1.4vh,12px)',
+            animation:'rise .6s ease both',
+          }}>
+            <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16 }}>
+              <div style={{ flex:1, minWidth:0 }}>
+                <div className="gold-lbl" style={{ color:T.green, marginBottom:10 }}>LIVE NOW</div>
+                <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:7 }}>
+                  {[
+                    'Linux removal agent deployed — RHEL + Ubuntu',
+                    'Server dashboard built and demo-ready',
+                    'SNOW SAM Pro migration in progress — discovery + removal scope aligned',
+                  ].map((item, i) => (
+                    <li key={i} style={{ display:'flex', gap:7, alignItems:'flex-start' }}>
+                      <span style={{ color:T.green, flexShrink:0, fontSize:7, marginTop:3, lineHeight:1 }}>▸</span>
+                      <span style={{ fontSize:'clamp(10px,1.1vw,12px)', color:T.muted, lineHeight:1.65 }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <a href="https://isra-sage.vercel.app/" target="_blank" rel="noopener noreferrer"
+                onClick={e => e.stopPropagation()}
+                style={{
+                  display:'flex', alignItems:'center', gap:8,
+                  padding:'9px 20px', flexShrink:0,
+                  border:`1px solid rgba(52,211,153,.45)`,
+                  borderRadius:4, color:T.green,
+                  fontFamily:"'IBM Plex Mono',monospace",
+                  fontSize:'clamp(8px,.9vw,10px)',
+                  letterSpacing:'.18em', textTransform:'uppercase',
+                  textDecoration:'none',
+                  background:'rgba(52,211,153,.07)',
+                  transition:'background .2s ease, border-color .2s ease',
+                }}>
+                OPEN DEMO →
+              </a>
+            </div>
           </div>
         )}
 
@@ -375,7 +420,7 @@ function SceneBuild({ onNext }) {
   const agentLifecycle = [
     { tag:'DEVELOP', color:T.blue,
       title:'Governance layer, not a new tool',
-      detail:'Wraps existing execution tooling — SNOW, Ansible, or native package managers. The agent enforces policy, ownership, and audit. It does not replace what already runs.' },
+      detail:'Linux agent already built for RHEL + Ubuntu. Wraps SNOW, Ansible, and native package managers. Enforces policy, ownership, and audit. Extends — does not replace — what already runs.' },
     { tag:'VALIDATE', color:T.amber,
       title:'Staging + sign-off',
       detail:'Test on non-production servers first. Review with server ops and change advisory before any production ring. No expansion without documented approval.' },
@@ -395,7 +440,8 @@ function SceneBuild({ onNext }) {
               fontSize:'clamp(22px,3.2vw,44px)', fontWeight:300, fontStyle:'italic',
               color:T.cream, lineHeight:1.12,
             }}>
-              Same governance.<br/>New environment. Higher stakes.
+              Same governance. New environment. Higher stakes.<br/>
+              <span style={{ fontSize:'clamp(14px,1.7vw,22px)', color:T.green }}>Linux agent live · SNOW migration underway.</span>
             </div>
           </div>
         )}
@@ -442,37 +488,37 @@ function ScenePlan() {
 
   const phases = [
     {
-      num:'01', time:'Week 1 – 2', theme:'SEARCH', color:T.gold,
-      title:'Discover before\nI configure anything.',
+      num:'01', time:'Days 1 – 30', theme:'MAP IT', color:T.gold,
+      title:'Understand before\nI touch anything.',
       bullets:[
-        'SNOW + CMDB: map installed vs. approved software on servers',
-        'Shadow server ops, change advisory, and security stakeholders',
-        'Understand existing CAB process and change window schedules',
-        'Identify the highest-risk gap — ownership, inventory, or policy drift',
+        'Audit server software landscape — installed vs. approved',
+        'Shadow server ops, CAB, and security stakeholders',
+        'Align scope with the ongoing SNOW SAM Pro migration',
+        'Identify top 3 governance gaps — ownership, inventory, or policy drift',
       ],
-      deliverable:'Server landscape map · top governance gap identified',
+      deliverable:'Server risk map · top 3 gaps · SNOW alignment confirmed',
     },
     {
-      num:'02', time:'Month 1', theme:'PROVE', color:T.blue,
-      title:'One gap. One\nworking component.',
+      num:'02', time:'Days 31 – 60', theme:'PROVE IT', color:T.blue,
+      title:'Demo what\'s built.\nRun the first PoC.',
       bullets:[
-        'Pick the highest-risk gap from discovery',
-        'Build the governance layer for it — DISCOVER or GOVERN stage first',
-        'PoC on 5 servers: IMPACT assessed, CAB approval, change window respected',
-        'Show results before asking for broader scope',
+        'Demo existing Linux agent + dashboard to server stakeholders',
+        'Pick highest-risk gap — run DISCOVER → VERIFY end-to-end',
+        'PoC on 5 servers: impact assessed, CAB approved, change window respected',
+        'Feed results into SNOW migration — removal data validates discovery accuracy',
       ],
-      deliverable:'First server governance component live · PoC evidence',
+      deliverable:'Live pipeline on 5 servers · dashboard demo · SNOW data validated',
     },
     {
-      num:'03', time:'Month 2 – 3', theme:'BUILD', color:T.green,
-      title:'First full\nremoval campaign.',
+      num:'03', time:'Days 61 – 90', theme:'SCALE IT', color:T.green,
+      title:'Full estate.\nProduction-ready.',
       bullets:[
-        'Full pipeline live: IMPACT → CAB → CHANGE WINDOW → ROLLBACK',
-        'Ring expansion: 5 servers → pilot ring → broader scope',
-        'Web app visibility: campaign status, owner alerts, audit trail',
-        'Establish a repeatable server governance cadence',
+        'Expand to full server estate — ring-based rollout',
+        'Dashboard + monitoring live for all stakeholders',
+        'Governance playbook documented — repeatable without me',
+        'SNOW migration: server removal data integrated into SAM Pro',
       ],
-      deliverable:'First campaign complete · ring process established',
+      deliverable:'Production-ready platform · SNOW-integrated · playbook complete',
     },
   ];
 
@@ -485,11 +531,19 @@ function ScenePlan() {
           <div style={{ marginBottom:'clamp(16px,2.5vh,26px)', animation:'rise .6s ease both' }}>
             <div className="gold-lbl">04 // SERVER PLATFORM · COMMITMENT</div>
             <div style={{ display:'flex', alignItems:'baseline', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
-              <div className="serif" style={{
-                fontSize:'clamp(26px,3.8vw,52px)', fontWeight:300, fontStyle:'italic',
-                color:T.cream, lineHeight:1.1,
-              }}>
-                First 90 days.<br/><span style={{ color:T.gold }}>Your pipeline. Running on servers.</span>
+              <div>
+                <div className="serif" style={{
+                  fontSize:'clamp(26px,3.8vw,52px)', fontWeight:300, fontStyle:'italic',
+                  color:T.cream, lineHeight:1.08,
+                }}>
+                  First 90 days.
+                </div>
+                <div className="serif" style={{
+                  fontSize:'clamp(18px,2.4vw,32px)', fontWeight:300, fontStyle:'italic',
+                  color:T.gold, lineHeight:1.1, marginTop:4,
+                }}>
+                  Map it. Prove it. Scale it.
+                </div>
               </div>
               <div className="lbl" style={{ lineHeight:1.9, textAlign:'right' }}>
                 SEARCH → PROVE → BUILD<br/>same method. new platform.
