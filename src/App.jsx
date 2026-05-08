@@ -473,7 +473,7 @@ function SceneBuild({ onNext }) {
 }
 
 // ── SCENE 5 — FIRST 90 DAYS ───────────────────────────────────────
-function ScenePlan() {
+function ScenePlan({ onNext }) {
   const [ph, setPh] = useState(0);
   useEffect(() => {
     const ts = [
@@ -523,7 +523,7 @@ function ScenePlan() {
   ];
 
   return (
-    <div className="scene" style={{ cursor:'default' }}>
+    <div className="scene-scroll" onClick={onNext}>
       <div className="inner">
 
         {/* Header */}
@@ -628,6 +628,11 @@ function ScenePlan() {
               <div className="lbl" style={{ fontSize:7.5 }}>APPLIED TO SERVERS · NOT DESCRIBED</div>
             </div>
           </div>
+        </div>
+
+        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+          <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
+          <div className="lbl">CLICK TO CONTINUE →</div>
         </div>
 
       </div>
