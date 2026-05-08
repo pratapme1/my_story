@@ -517,7 +517,7 @@ function ScenePlan({ onNext }) {
         'Expand to full server estate — ring-based rollout',
         'Dashboard + monitoring live for all stakeholders',
         'Governance playbook documented — repeatable without me',
-        'SNOW migration: server removal data integrated into SAM Pro',
+        'SNOW migration: server removal data integration',
       ],
       deliverable:'Production-ready platform · SNOW-integrated · playbook complete',
     },
