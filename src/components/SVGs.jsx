@@ -551,11 +551,15 @@ export function ISRAArchitecture({ phase = 6 }) {
           stroke={`${cUp}38`} strokeWidth={1.2} strokeDasharray="5 3"/>
         <polygon points={`${rx-5},${y1+11} ${rx+5},${y1+11} ${rx},${y1+2}`}
           fill={`${cUp}85`}/>
-        <circle cx={lx} r={5} fill={cDown} opacity={0.9}>
-          <animateMotion dur="1.7s" repeatCount="indefinite" path={`M0,0 L0,${h}`}/>
+        {/* Downward particle — starts at y1, fades in/out to avoid jarring jump */}
+        <circle cx={lx} cy={y1} r={5} fill={cDown}>
+          <animateMotion dur="1.8s" repeatCount="indefinite" path={`M0,0 L0,${h}`}/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="1.8s" repeatCount="indefinite"/>
         </circle>
-        <circle cx={rx} r={5} fill={cUp} opacity={0.9}>
-          <animateMotion dur="1.7s" repeatCount="indefinite" begin="0.85s" path={`M0,${h} L0,0`}/>
+        {/* Upward particle — starts at y2, fades in/out */}
+        <circle cx={rx} cy={y2} r={5} fill={cUp}>
+          <animateMotion dur="1.8s" repeatCount="indefinite" begin="0.9s" path={`M0,0 L0,${-h}`}/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="1.8s" begin="0.9s" repeatCount="indefinite"/>
         </circle>
         <rect x={mx-88} y={midy-12} width={176} height={24} rx={5}
           fill="rgba(4,4,8,.96)" stroke="rgba(237,233,224,.12)" strokeWidth={1}/>
@@ -603,9 +607,14 @@ export function ISRAArchitecture({ phase = 6 }) {
       {/* ── ISRA AGENT ── */}
       {phase >= 5 && (
         <g style={{ animation:"nodeIn .55s ease both" }}>
-          {zone(AY1, AY2, T.gold, "ISRA AGENT", "Python · FastAPI · systemd · .deb / .rpm")}
+          {zone(AY1, AY2, T.gold, "ISRA AGENT", "")}
+          {/* Tech stack subtitle — kept left to avoid Policy Engine overlap */}
+          <text x={26} y={AY1+38} fontFamily="IBM Plex Mono" fontSize={8}
+            fill={`${T.gold}50`} letterSpacing={1}>
+            Python · FastAPI · systemd · .deb / .rpm
+          </text>
 
-          {/* Pipeline steps */}
+          {/* Pipeline steps — start at AY1+44 to clear zone label row */}
           {[
             { cx:88,  w:128, label:"COLLECT",      sub:"apt · snap · pip · npm",  color:T.gold,  icon:iconRobot },
             { cx:258, w:148, label:"INTELLIGENCE",  sub:"Normalize · AI analysis", color:T.gold,  icon:iconBrain },
@@ -613,25 +622,25 @@ export function ISRAArchitecture({ phase = 6 }) {
             { cx:598, w:118, label:"RUN",           sub:"Execute commands",        color:T.gold,  icon:iconServer},
             { cx:758, w:128, label:"VERIFY",        sub:"Confirm removal",         color:T.green, icon:iconTable },
           ].map((s, i, arr) => {
-            const by = AY1 + 12, bh = AY2 - AY1 - 24;
+            const by = AY1 + 44, bh = AY2 - AY1 - 56;
             const bx = s.cx - s.w/2;
-            const iconY = AY1 + 46;
-            const labelY = AY1 + 78;
-            const subY = AY1 + 95;
-            const arrowY = AY1 + bh/2 + 12;
+            const iconY = AY1 + 70;
+            const labelY = AY1 + 98;
+            const subY   = AY1 + 112;
+            const arrowY = AY1 + 44 + bh/2;
             return (
               <g key={s.label}>
                 <rect x={bx} y={by} width={s.w} height={bh} rx={8}
                   fill="rgba(4,4,8,.90)" stroke={`${s.color}32`} strokeWidth={1}/>
                 <rect x={bx} y={by} width={s.w} height={bh} rx={8}
                   fill={`${s.color}07`}/>
-                <circle cx={s.cx} cy={iconY} r={20} fill={`${s.color}16`}
+                <circle cx={s.cx} cy={iconY} r={18} fill={`${s.color}16`}
                   style={{ animation:"pulseGlow 3.2s ease-in-out infinite" }}/>
                 <g transform={`translate(${s.cx},${iconY})`}>{s.icon(s.color)}</g>
                 <text x={s.cx} y={labelY} textAnchor="middle" fontFamily="IBM Plex Mono"
-                  fontSize={10.5} fontWeight="500" letterSpacing={1.6} fill={s.color}>{s.label}</text>
+                  fontSize={10} fontWeight="500" letterSpacing={1.5} fill={s.color}>{s.label}</text>
                 <text x={s.cx} y={subY} textAnchor="middle" fontFamily="IBM Plex Mono"
-                  fontSize={8.5} fill="rgba(237,233,224,.55)">{s.sub}</text>
+                  fontSize={8} fill="rgba(237,233,224,.55)">{s.sub}</text>
                 {i < arr.length-1 && (
                   <g>
                     <line x1={s.cx+s.w/2+2} y1={arrowY} x2={arr[i+1].cx-arr[i+1].w/2-10} y2={arrowY}
@@ -646,18 +655,18 @@ export function ISRAArchitecture({ phase = 6 }) {
             );
           })}
 
-          {/* Policy Engine */}
+          {/* Policy Engine — aligned with pipeline boxes */}
           {phase >= 6 && (
             <g style={{ animation:"nodeIn .45s ease both" }}>
-              <rect x={900} y={AY1+12} width={112} height={AY2-AY1-24} rx={8}
+              <rect x={900} y={AY1+44} width={112} height={AY2-AY1-56} rx={8}
                 fill="rgba(248,113,113,.08)" stroke={`${T.red}40`} strokeWidth={1}/>
-              <g transform={`translate(${956},${AY1+46})`}>{iconShield(T.red)}</g>
-              <text x={956} y={AY1+78} textAnchor="middle" fontFamily="IBM Plex Mono"
-                fontSize={9.5} fontWeight="500" letterSpacing={1.4} fill={T.red}>POLICY</text>
-              <text x={956} y={AY1+93} textAnchor="middle" fontFamily="IBM Plex Mono"
-                fontSize={9.5} fontWeight="500" letterSpacing={1.4} fill={T.red}>ENGINE</text>
-              <text x={956} y={AY1+109} textAnchor="middle" fontFamily="IBM Plex Mono"
-                fontSize={8} fill="rgba(248,113,113,.6)">kernel · libc</text>
+              <g transform={`translate(${956},${AY1+70})`}>{iconShield(T.red)}</g>
+              <text x={956} y={AY1+98} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={9} fontWeight="500" letterSpacing={1.4} fill={T.red}>POLICY</text>
+              <text x={956} y={AY1+110} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={9} fontWeight="500" letterSpacing={1.4} fill={T.red}>ENGINE</text>
+              <text x={956} y={AY1+124} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={7.5} fill="rgba(248,113,113,.6)">kernel · libc · glibc</text>
             </g>
           )}
         </g>
