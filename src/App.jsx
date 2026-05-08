@@ -420,7 +420,7 @@ function SceneBuild({ onNext }) {
   const agentLifecycle = [
     { tag:'DEVELOP', color:T.blue,
       title:'Governance layer, not a new tool',
-      detail:'Linux agent already built for RHEL + Ubuntu. Wraps SNOW, Ansible, and native package managers. Enforces policy, ownership, and audit. Extends — does not replace — what already runs.' },
+      detail:'Linux agent already built for RHEL + Ubuntu. Wraps SNOW, Ansible, Tanium, SCCM, and native package managers. Enforces policy, ownership, and audit. Extends — does not replace — what already runs.' },
     { tag:'VALIDATE', color:T.amber,
       title:'Staging + sign-off',
       detail:'Test on non-production servers first. Review with server ops and change advisory before any production ring. No expansion without documented approval.' },
@@ -610,8 +610,9 @@ function ScenePlan({ onNext }) {
               fontSize:'clamp(17px,2.1vw,26px)', fontStyle:'italic',
               color:T.cream, lineHeight:1.5,
             }}>
-              "Show me your highest-risk server gap.<br/>
-              I'll have governance around it in 30 days."
+              "Removal is where we start.<br/>
+              Prevention is where we go.<br/>
+              The governance layer is the same — built once, extended."
             </div>
             <div style={{ textAlign:'right' }}>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:6, justifyContent:'flex-end' }}>
