@@ -238,9 +238,9 @@ export function GovernancePipeline({ phase = 6 }) {
     { x:383, label:"GOVERN",   color:T.blue,
       steps:["Owner notified + buffer", "Exception window open"] },
     { x:636, label:"EXECUTE",  color:T.amber,
-      steps:["Config pushed to server", "Event triggers agent", "Silent removal runs"] },
+      steps:["Config created on server side", "Event triggers agent", "Silent removal runs"] },
     { x:889, label:"VERIFY",   color:T.green,
-      steps:["Post-removal scan", "Detailed logging", "License reclaimed to SAM"] },
+      steps:["Post-removal scan", "Detailed logging", "software removal reporting"] },
   ];
 
   return (
