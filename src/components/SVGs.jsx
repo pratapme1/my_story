@@ -62,10 +62,10 @@ export function KnowledgeGraph({ phase = 5 }) {
   const EDGE_START_X = 210;
 
   const clientNodes = [
-    { x:55,  y:78,  label:"ZERO VISIBILITY", sub:"no software inventory",  color:T.red,   icon:"eye",       d:0   },
-    { x:38,  y:183, label:"NO OWNERSHIP",    sub:"nothing assigned",       color:T.amber, icon:"alert",     d:90  },
-    { x:55,  y:295, label:"MANUAL INTAKE",   sub:"email chains, no flow",  color:T.amber, icon:"hourglass", d:180 },
-    { x:38,  y:400, label:"NO GOVERNANCE",   sub:"removal unstructured",   color:T.red,   icon:"mail",      d:270 },
+    { x:55,  y:78,  label:"ZERO VISIBILITY", sub:"Software available",  color:T.red,   icon:"eye",       d:0   },
+    { x:38,  y:183, label:"NO OWNERSHIP",    sub:"software and next steps",       color:T.amber, icon:"alert",     d:90  },
+    { x:55,  y:295, label:"MANUAL INTAKE",   sub:"email chains,no tracking",  color:T.amber, icon:"hourglass", d:180 },
+    { x:38,  y:400, label:"NO Automation",   sub:"removal unstructured",   color:T.red,   icon:"mail",      d:270 },
   ];
 
   const serverQuestions = [
