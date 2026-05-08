@@ -805,13 +805,16 @@ function SceneISRA({ onNext }) {
 
   return (
     <div className="scene" onClick={onNext} style={{ cursor:'pointer' }}>
-      <div className="inner" style={{ padding:'clamp(10px,2vh,24px) clamp(20px,3.5vw,48px)' }}>
+      <div className="inner" style={{
+        padding:'clamp(10px,2vh,20px) clamp(20px,3.5vw,48px)',
+        height:'100%', display:'flex', flexDirection:'column',
+      }}>
 
         {ph >= 1 && (
-          <div style={{ marginBottom:'clamp(8px,1.4vh,14px)', animation:'rise .5s ease both' }}>
+          <div style={{ marginBottom:'clamp(6px,1vh,12px)', flexShrink:0, animation:'rise .5s ease both' }}>
             <div className="gold-lbl">ISRA · SYSTEM ARCHITECTURE</div>
             <div style={{ display:'flex', alignItems:'baseline', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
-              <div className="serif" style={{ fontSize:'clamp(18px,2.4vw,32px)', fontWeight:300, fontStyle:'italic', color:T.cream, lineHeight:1.12 }}>
+              <div className="serif" style={{ fontSize:'clamp(16px,2vw,28px)', fontWeight:300, fontStyle:'italic', color:T.cream, lineHeight:1.12 }}>
                 The stack behind the agent.
               </div>
               <div className="lbl" style={{ lineHeight:1.9, textAlign:'right', fontSize:'clamp(6.5px,.72vw,8px)' }}>
@@ -821,9 +824,11 @@ function SceneISRA({ onNext }) {
           </div>
         )}
 
-        <ISRAArchitecture phase={ph}/>
+        <div style={{ flex:1, minHeight:0, display:'flex', alignItems:'center', overflow:'hidden' }}>
+          <ISRAArchitecture phase={ph}/>
+        </div>
 
-        <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+        <div style={{ marginTop:6, flexShrink:0, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
           <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
           <div className="lbl">CLICK TO CONTINUE →</div>
         </div>

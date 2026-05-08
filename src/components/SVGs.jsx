@@ -486,87 +486,87 @@ const iconShield = (c) => (
 );
 
 export function ISRAArchitecture({ phase = 6 }) {
-  // Zone y bounds
-  const DY1=0, DY2=148;           // Dashboard
-  const G1Y1=148, G1Y2=222;       // Gap 1
-  const SY1=222, SY2=368;         // Supabase
-  const G2Y1=368, G2Y2=442;       // Gap 2
-  const AY1=442, AY2=520;         // Agent
+  // Zone y bounds — taller layout for readability
+  const DY1=0,   DY2=182;          // Dashboard
+  const G1Y1=182, G1Y2=272;        // Gap 1
+  const SY1=272, SY2=454;          // Supabase
+  const G2Y1=454, G2Y2=544;        // Gap 2
+  const AY1=544, AY2=700;          // Agent (156px — plenty of room)
 
-  const DCY = (DY1+DY2)/2 + 8;   // Dashboard box center y
-  const SCY = (SY1+SY2)/2 + 6;   // Supabase box center y
-  const ACY = (AY1+AY2)/2 + 2;   // Agent box center y
+  const DCY = (DY1+DY2)/2 + 6;    // Dashboard box center y
+  const SCY = (SY1+SY2)/2 + 4;    // Supabase box center y
+  const ACY = (AY1+AY2)/2;        // Agent center y (for arrow alignment)
 
-  const BOX_H = 82;
+  const BOX_H = 104;
 
   // Draws a component box with icon + labels
   const box = (cx, cy, w, color, label, sub, iconFn, pill) => {
     const bx = cx - w/2, by = cy - BOX_H/2;
-    const ix = bx + 34, iy = cy - 2;
-    const tx = bx + 60;
+    const ix = bx + 40, iy = cy;
+    const tx = bx + 72;
     return (
       <g>
-        <rect x={bx} y={by} width={w} height={BOX_H} rx={8}
-          fill="rgba(4,4,8,.88)" stroke={`${color}28`} strokeWidth={1}/>
-        <rect x={bx} y={by} width={w} height={BOX_H} rx={8}
-          fill={`${color}05`}/>
-        <circle cx={ix} cy={iy} r={20} fill={`${color}12`}
+        <rect x={bx} y={by} width={w} height={BOX_H} rx={9}
+          fill="rgba(4,4,8,.90)" stroke={`${color}30`} strokeWidth={1}/>
+        <rect x={bx} y={by} width={w} height={BOX_H} rx={9}
+          fill={`${color}06`}/>
+        <circle cx={ix} cy={iy} r={22} fill={`${color}14`}
           style={{ animation:"pulseGlow 3.2s ease-in-out infinite" }}/>
         <g transform={`translate(${ix},${iy})`}>{iconFn(color)}</g>
-        <text x={tx} y={cy-8} fontFamily="IBM Plex Mono" fontSize={9}
-          fontWeight="500" letterSpacing={1.8} fill={color}>{label}</text>
-        <text x={tx} y={cy+7} fontFamily="IBM Plex Mono" fontSize={7.2}
-          fill="rgba(237,233,224,.55)">{sub}</text>
+        <text x={tx} y={cy-10} fontFamily="IBM Plex Mono" fontSize={11}
+          fontWeight="500" letterSpacing={1.6} fill={color}>{label}</text>
+        <text x={tx} y={cy+8} fontFamily="IBM Plex Mono" fontSize={9}
+          fill="rgba(237,233,224,.6)">{sub}</text>
         {pill && (
-          <text x={tx} y={cy+20} fontFamily="IBM Plex Mono" fontSize={6.5}
-            fill={`${color}55`} letterSpacing={0.4}>{pill}</text>
+          <text x={tx} y={cy+24} fontFamily="IBM Plex Mono" fontSize={8.5}
+            fill={`${color}60`} letterSpacing={0.4}>{pill}</text>
         )}
       </g>
     );
   };
 
-  // Zone band background + labels
+  // Zone band background + label row
   const zone = (y1, y2, color, label, tech) => (
     <g>
-      <rect x={8} y={y1+3} width={1004} height={y2-y1-6} rx={10}
-        fill={`${color}05`} stroke={`${color}22`} strokeWidth={1}/>
-      <text x={24} y={y1+20} fontFamily="IBM Plex Mono" fontSize={8.5}
-        fontWeight="600" letterSpacing={2.2} fill={color} opacity={0.85}>{label}</text>
-      <text x={996} y={y1+20} textAnchor="end" fontFamily="IBM Plex Mono"
-        fontSize={7} fill="rgba(237,233,224,.24)" letterSpacing={0.6}>{tech}</text>
+      <rect x={8} y={y1+3} width={1004} height={y2-y1-6} rx={12}
+        fill={`${color}05`} stroke={`${color}25`} strokeWidth={1}/>
+      <text x={26} y={y1+24} fontFamily="IBM Plex Mono" fontSize={11}
+        fontWeight="600" letterSpacing={2.5} fill={color} opacity={0.9}>{label}</text>
+      <text x={994} y={y1+24} textAnchor="end" fontFamily="IBM Plex Mono"
+        fontSize={9} fill="rgba(237,233,224,.28)" letterSpacing={0.6}>{tech}</text>
     </g>
   );
 
-  // Bidirectional animated connection between two zones
+  // Bidirectional animated connection between zones
   const conn = (y1, y2, cDown, cUp, label) => {
-    const mx = 510, lx = mx-14, rx = mx+14, h = y2-y1;
+    const mx = 510, lx = mx-16, rx = mx+16, h = y2-y1;
     const midy = (y1+y2)/2;
     return (
       <g style={{ animation:"fade .5s ease both" }}>
         <line x1={lx} y1={y1} x2={lx} y2={y2}
-          stroke={`${cDown}35`} strokeWidth={1} strokeDasharray="4 3"/>
-        <polygon points={`${lx-4},${y2-9} ${lx+4},${y2-9} ${lx},${y2-1}`}
-          fill={`${cDown}80`}/>
+          stroke={`${cDown}38`} strokeWidth={1.2} strokeDasharray="5 3"/>
+        <polygon points={`${lx-5},${y2-11} ${lx+5},${y2-11} ${lx},${y2-2}`}
+          fill={`${cDown}85`}/>
         <line x1={rx} y1={y1} x2={rx} y2={y2}
-          stroke={`${cUp}35`} strokeWidth={1} strokeDasharray="4 3"/>
-        <polygon points={`${rx-4},${y1+9} ${rx+4},${y1+9} ${rx},${y1+1}`}
-          fill={`${cUp}80`}/>
-        <circle cx={lx} r={4} fill={cDown} opacity={0.9}>
+          stroke={`${cUp}38`} strokeWidth={1.2} strokeDasharray="5 3"/>
+        <polygon points={`${rx-5},${y1+11} ${rx+5},${y1+11} ${rx},${y1+2}`}
+          fill={`${cUp}85`}/>
+        <circle cx={lx} r={5} fill={cDown} opacity={0.9}>
           <animateMotion dur="1.7s" repeatCount="indefinite" path={`M0,0 L0,${h}`}/>
         </circle>
-        <circle cx={rx} r={4} fill={cUp} opacity={0.9}>
+        <circle cx={rx} r={5} fill={cUp} opacity={0.9}>
           <animateMotion dur="1.7s" repeatCount="indefinite" begin="0.85s" path={`M0,${h} L0,0`}/>
         </circle>
-        <rect x={mx-76} y={midy-10} width={152} height={20} rx={4}
-          fill="rgba(4,4,8,.94)" stroke="rgba(237,233,224,.1)" strokeWidth={1}/>
-        <text x={mx} y={midy+4} textAnchor="middle" fontFamily="IBM Plex Mono"
-          fontSize={7.2} fill="rgba(237,233,224,.45)" letterSpacing={0.6}>{label}</text>
+        <rect x={mx-88} y={midy-12} width={176} height={24} rx={5}
+          fill="rgba(4,4,8,.96)" stroke="rgba(237,233,224,.12)" strokeWidth={1}/>
+        <text x={mx} y={midy+5} textAnchor="middle" fontFamily="IBM Plex Mono"
+          fontSize={9} fill="rgba(237,233,224,.5)" letterSpacing={0.6}>{label}</text>
       </g>
     );
   };
 
   return (
-    <svg viewBox="0 0 1020 520" width="100%" style={{ display:"block", overflow:"visible" }}>
+    <svg viewBox="0 0 1020 700" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style={{ display:"block" }}>
       <defs>
         <filter id="israglo" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
@@ -578,9 +578,9 @@ export function ISRAArchitecture({ phase = 6 }) {
       {phase >= 1 && (
         <g style={{ animation:"nodeIn .55s ease both" }}>
           {zone(DY1, DY2, T.blue, "DASHBOARD", "Next.js · Vercel · Supabase Realtime")}
-          {box(175, DCY, 268, T.blue, "APPS",  "Software inventory · Active filter",     iconApps,    null)}
-          {box(510, DCY, 268, T.blue, "FLEET", "Endpoint status · Health monitoring",    iconMonitor, null)}
-          {box(845, DCY, 268, T.blue, "LOGS",  "Removal history · Live execution",       iconTable,   null)}
+          {box(175, DCY, 278, T.blue, "APPS",  "Software inventory · Active filter",  iconApps,    null)}
+          {box(510, DCY, 278, T.blue, "FLEET", "Endpoint status · Health monitoring", iconMonitor, null)}
+          {box(845, DCY, 278, T.blue, "LOGS",  "Removal history · Live execution",    iconTable,   null)}
         </g>
       )}
 
@@ -591,9 +591,9 @@ export function ISRAArchitecture({ phase = 6 }) {
       {phase >= 3 && (
         <g style={{ animation:"nodeIn .55s ease both" }}>
           {zone(SY1, SY2, T.green, "SUPABASE", "PostgreSQL · Row Level Security")}
-          {box(175, SCY, 274, T.green, "isra.inventory",     "Software artifacts per endpoint",  iconDatabase, "isra.inventory")}
-          {box(510, SCY, 274, T.green, "isra.endpoints",     "Registered server machines",        iconServer,   "isra.endpoints")}
-          {box(845, SCY, 280, T.green, "isra.removal_tasks", "Job queue · Execution history",     iconQueue,    "isra.removal_tasks")}
+          {box(175, SCY, 284, T.green, "isra.inventory",     "Software artifacts per endpoint",  iconDatabase, "isra.inventory")}
+          {box(510, SCY, 284, T.green, "isra.endpoints",     "Registered server machines",       iconServer,   "isra.endpoints")}
+          {box(845, SCY, 290, T.green, "isra.removal_tasks", "Job queue · Execution history",    iconQueue,    "isra.removal_tasks")}
         </g>
       )}
 
@@ -607,35 +607,39 @@ export function ISRAArchitecture({ phase = 6 }) {
 
           {/* Pipeline steps */}
           {[
-            { cx:88,  w:118, label:"COLLECT",      sub:"apt snap pip npm",  color:T.gold,  icon:iconRobot },
-            { cx:248, w:138, label:"INTELLIGENCE",  sub:"Normalize · AI",    color:T.gold,  icon:iconBrain },
-            { cx:422, w:118, label:"PLAN",          sub:"Build plan",        color:T.blue,  icon:iconApps  },
-            { cx:578, w:108, label:"RUN",           sub:"Execute",           color:T.gold,  icon:iconServer},
-            { cx:730, w:118, label:"VERIFY",        sub:"Confirm removal",   color:T.green, icon:iconTable },
+            { cx:88,  w:128, label:"COLLECT",      sub:"apt · snap · pip · npm",  color:T.gold,  icon:iconRobot },
+            { cx:258, w:148, label:"INTELLIGENCE",  sub:"Normalize · AI analysis", color:T.gold,  icon:iconBrain },
+            { cx:438, w:128, label:"PLAN",          sub:"Build removal plan",      color:T.blue,  icon:iconApps  },
+            { cx:598, w:118, label:"RUN",           sub:"Execute commands",        color:T.gold,  icon:iconServer},
+            { cx:758, w:128, label:"VERIFY",        sub:"Confirm removal",         color:T.green, icon:iconTable },
           ].map((s, i, arr) => {
-            const by = AY1 + 10, bh = AY2 - AY1 - 20;
+            const by = AY1 + 12, bh = AY2 - AY1 - 24;
             const bx = s.cx - s.w/2;
+            const iconY = AY1 + 46;
+            const labelY = AY1 + 78;
+            const subY = AY1 + 95;
+            const arrowY = AY1 + bh/2 + 12;
             return (
               <g key={s.label}>
-                <rect x={bx} y={by} width={s.w} height={bh} rx={7}
-                  fill="rgba(4,4,8,.88)" stroke={`${s.color}30`} strokeWidth={1}/>
-                <rect x={bx} y={by} width={s.w} height={bh} rx={7}
-                  fill={`${s.color}06`}/>
-                <circle cx={s.cx} cy={AY1+32} r={16} fill={`${s.color}14`}
+                <rect x={bx} y={by} width={s.w} height={bh} rx={8}
+                  fill="rgba(4,4,8,.90)" stroke={`${s.color}32`} strokeWidth={1}/>
+                <rect x={bx} y={by} width={s.w} height={bh} rx={8}
+                  fill={`${s.color}07`}/>
+                <circle cx={s.cx} cy={iconY} r={20} fill={`${s.color}16`}
                   style={{ animation:"pulseGlow 3.2s ease-in-out infinite" }}/>
-                <g transform={`translate(${s.cx},${AY1+32})`}>{s.icon(s.color)}</g>
-                <text x={s.cx} y={AY1+54} textAnchor="middle" fontFamily="IBM Plex Mono"
-                  fontSize={8} fontWeight="500" letterSpacing={1.5} fill={s.color}>{s.label}</text>
-                <text x={s.cx} y={AY1+66} textAnchor="middle" fontFamily="IBM Plex Mono"
-                  fontSize={6.8} fill="rgba(237,233,224,.5)">{s.sub}</text>
+                <g transform={`translate(${s.cx},${iconY})`}>{s.icon(s.color)}</g>
+                <text x={s.cx} y={labelY} textAnchor="middle" fontFamily="IBM Plex Mono"
+                  fontSize={10.5} fontWeight="500" letterSpacing={1.6} fill={s.color}>{s.label}</text>
+                <text x={s.cx} y={subY} textAnchor="middle" fontFamily="IBM Plex Mono"
+                  fontSize={8.5} fill="rgba(237,233,224,.55)">{s.sub}</text>
                 {i < arr.length-1 && (
                   <g>
-                    <line x1={s.cx+s.w/2+2} y1={ACY} x2={arr[i+1].cx-arr[i+1].w/2-10} y2={ACY}
-                      stroke={`${T.gold}55`} strokeWidth={1.5} strokeDasharray="4 3"
+                    <line x1={s.cx+s.w/2+2} y1={arrowY} x2={arr[i+1].cx-arr[i+1].w/2-10} y2={arrowY}
+                      stroke={`${T.gold}60`} strokeWidth={1.5} strokeDasharray="4 3"
                       style={{ animation:"arrowMove .8s linear infinite" }}/>
                     <polygon
-                      points={`${arr[i+1].cx-arr[i+1].w/2-14},${ACY-4} ${arr[i+1].cx-arr[i+1].w/2-4},${ACY} ${arr[i+1].cx-arr[i+1].w/2-14},${ACY+4}`}
-                      fill={`${T.gold}80`}/>
+                      points={`${arr[i+1].cx-arr[i+1].w/2-14},${arrowY-5} ${arr[i+1].cx-arr[i+1].w/2-4},${arrowY} ${arr[i+1].cx-arr[i+1].w/2-14},${arrowY+5}`}
+                      fill={`${T.gold}85`}/>
                   </g>
                 )}
               </g>
@@ -645,13 +649,15 @@ export function ISRAArchitecture({ phase = 6 }) {
           {/* Policy Engine */}
           {phase >= 6 && (
             <g style={{ animation:"nodeIn .45s ease both" }}>
-              <rect x={852} y={AY1+10} width={160} height={AY2-AY1-20} rx={7}
-                fill="rgba(248,113,113,.07)" stroke={`${T.red}35`} strokeWidth={1}/>
-              <g transform={`translate(${932},${AY1+32})`}>{iconShield(T.red)}</g>
-              <text x={932} y={AY1+54} textAnchor="middle" fontFamily="IBM Plex Mono"
-                fontSize={7.5} fontWeight="500" letterSpacing={1.5} fill={T.red}>POLICY ENGINE</text>
-              <text x={932} y={AY1+66} textAnchor="middle" fontFamily="IBM Plex Mono"
-                fontSize={6.5} fill="rgba(248,113,113,.55)">kernel · libc · glibc</text>
+              <rect x={900} y={AY1+12} width={112} height={AY2-AY1-24} rx={8}
+                fill="rgba(248,113,113,.08)" stroke={`${T.red}40`} strokeWidth={1}/>
+              <g transform={`translate(${956},${AY1+46})`}>{iconShield(T.red)}</g>
+              <text x={956} y={AY1+78} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={9.5} fontWeight="500" letterSpacing={1.4} fill={T.red}>POLICY</text>
+              <text x={956} y={AY1+93} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={9.5} fontWeight="500" letterSpacing={1.4} fill={T.red}>ENGINE</text>
+              <text x={956} y={AY1+109} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={8} fill="rgba(248,113,113,.6)">kernel · libc</text>
             </g>
           )}
         </g>
