@@ -234,9 +234,9 @@ export function GovernancePipeline({ phase = 6 }) {
 
   const stages = [
     { x:130, label:"DISCOVER", color:T.gold,
-      steps:["SNOW agent pulls inventory", "Policy & target definition", "Servers tagged for removal"] },
+      steps:["SNOW agent pulls inventory", "Policy & target definition"] },
     { x:383, label:"GOVERN",   color:T.blue,
-      steps:["Owner notified + buffer", "Exception window open", "CAB approval gate"] },
+      steps:["Owner notified + buffer", "Exception window open"] },
     { x:636, label:"EXECUTE",  color:T.amber,
       steps:["Config pushed to server", "Event triggers agent", "Silent removal runs"] },
     { x:889, label:"VERIFY",   color:T.green,
@@ -617,7 +617,7 @@ export function ISRAArchitecture({ phase = 6 }) {
           {/* Pipeline steps — start at AY1+44 to clear zone label row */}
           {[
             { cx:88,  w:128, label:"COLLECT",      sub:"apt · snap · pip · npm",  color:T.gold,  icon:iconRobot },
-            { cx:258, w:148, label:"INTELLIGENCE",  sub:"Normalize · AI analysis", color:T.gold,  icon:iconBrain },
+            { cx:258, w:148, label:"INTELLIGENCE",  sub:"Normalize", color:T.gold,  icon:iconBrain },
             { cx:438, w:128, label:"PLAN",          sub:"Build removal plan",      color:T.blue,  icon:iconApps  },
             { cx:598, w:118, label:"RUN",           sub:"Execute commands",        color:T.gold,  icon:iconServer},
             { cx:758, w:128, label:"VERIFY",        sub:"Confirm removal",         color:T.green, icon:iconTable },

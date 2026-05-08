@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISRA — System Architecture</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e8e6df;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+.container{max-width:920px;width:100%}
+.title{text-align:center;margin-bottom:40px}
+.title h1{font-size:28px;font-weight:300;letter-spacing:4px;color:#c9a84c;text-transform:uppercase;margin-bottom:8px}
+.title p{font-size:13px;color:#6b6960;letter-spacing:2px;font-family:'JetBrains Mono',monospace}
+
+.layer{border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px 24px;position:relative;backdrop-filter:blur(10px)}
+.layer::before{content:'';position:absolute;inset:0;border-radius:16px;pointer-events:none}
+.layer-dash{background:rgba(56,138,221,0.04)}
+.layer-dash::before{border:1px solid rgba(56,138,221,0.15);border-radius:16px}
+.layer-supa{background:rgba(29,158,117,0.04)}
+.layer-supa::before{border:1px solid rgba(29,158,117,0.15);border-radius:16px}
+.layer-agent{background:rgba(201,168,76,0.04)}
+.layer-agent::before{border:1px solid rgba(201,168,76,0.15);border-radius:16px}
+
+.layer-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.layer-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.layer-icon.blue{background:rgba(56,138,221,0.12);color:#378ADD}
+.layer-icon.green{background:rgba(29,158,117,0.12);color:#1D9E75}
+.layer-icon.gold{background:rgba(201,168,76,0.12);color:#c9a84c}
+.layer-name{font-size:17px;font-weight:500;letter-spacing:0.5px}
+.layer-tech{margin-left:auto;font-size:11px;color:#6b6960;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px}
+
+.cards{display:grid;gap:10px}
+.cards-3{grid-template-columns:repeat(3,1fr)}
+.cards-2{grid-template-columns:repeat(2,1fr)}
+
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px;display:flex;gap:12px;transition:border-color 0.3s,background 0.3s}
+.card:hover{border-color:rgba(255,255,255,0.12);background:rgba(255,255,255,0.05)}
+.card-icon{font-size:18px;margin-top:2px;flex-shrink:0}
+.card-icon.blue{color:#378ADD}
+.card-icon.green{color:#1D9E75}
+.card-icon.gold{color:#c9a84c}
+.card-icon.coral{color:#D85A30}
+.card-icon.red{color:#E24B4A}
+.card-title{font-size:13px;font-weight:500;color:#e8e6df}
+.card-desc{font-size:11px;color:#8a8880;margin-top:3px;line-height:1.5}
+.pill{display:inline-block;font-size:10px;padding:2px 10px;border-radius:20px;margin-top:6px;font-family:'JetBrains Mono',monospace;letter-spacing:0.3px}
+.pill.blue{background:rgba(56,138,221,0.1);color:#378ADD}
+.pill.green{background:rgba(29,158,117,0.1);color:#1D9E75}
+.pill.gold{background:rgba(201,168,76,0.1);color:#c9a84c}
+
+.connector{display:flex;justify-content:center;align-items:center;height:56px;position:relative}
+.conn-line{position:relative;display:flex;align-items:center;gap:12px}
+.conn-label{font-size:11px;color:#6b6960;font-family:'JetBrains Mono',monospace;letter-spacing:0.3px;display:flex;align-items:center;gap:6px}
+.conn-label i{font-size:14px}
+.flow-dot{width:6px;height:6px;border-radius:50%;animation:flowPulse 2s ease-in-out infinite}
+.flow-dot.down{animation-delay:0s}
+.flow-dot.up{animation-delay:1s}
+@keyframes flowPulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1.2)}}
+.flow-track{width:2px;height:20px;position:relative;overflow:hidden;border-radius:1px}
+.flow-track .particle{position:absolute;width:2px;height:6px;border-radius:1px;animation:moveDown 1s linear infinite}
+.flow-track.up .particle{animation:moveUp 1s linear infinite}
+@keyframes moveDown{0%{top:-6px;opacity:0}20%{opacity:1}80%{opacity:1}100%{top:20px;opacity:0}}
+@keyframes moveUp{0%{bottom:-6px;opacity:0}20%{opacity:1}80%{opacity:1}100%{bottom:20px;opacity:0}}
+
+.section-label{font-size:12px;font-weight:500;color:#8a8880;margin:16px 0 8px;display:flex;align-items:center;gap:8px;letter-spacing:0.5px}
+.section-label i{font-size:16px;color:#c9a84c}
+
+.exec-pipeline{display:flex;align-items:center;gap:0}
+.exec-step{flex:1;text-align:center;padding:14px 8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;transition:all 0.3s}
+.exec-step:hover{background:rgba(255,255,255,0.05);border-color:rgba(201,168,76,0.25)}
+.exec-step i{font-size:22px;display:block;margin-bottom:6px}
+.exec-step .step-name{font-size:13px;font-weight:500;display:block}
+.exec-step .step-desc{font-size:10px;color:#6b6960;margin-top:3px;display:block}
+.exec-arrow{width:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;height:40px}
+.exec-arrow svg{overflow:visible}
+.arrow-flow{stroke-dasharray:4 3;animation:arrowMove 0.8s linear infinite}
+@keyframes arrowMove{to{stroke-dashoffset:-14}}
+
+.shield{border-left:3px solid #E24B4A;padding:12px 16px;margin-top:14px;background:rgba(226,75,74,0.04);border-radius:0 8px 8px 0}
+.shield-title{font-size:12px;font-weight:500;color:#E24B4A;display:flex;align-items:center;gap:6px}
+.shield-title i{font-size:15px}
+.shield-desc{font-size:11px;color:#8a8880;margin-top:4px}
+
+.status-bar{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;padding:10px 16px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.04)}
+.status-item{font-size:11px;color:#6b6960;display:flex;align-items:center;gap:6px}
+.status-item i{font-size:14px}
+.status-item.secure i{color:#1D9E75}
+.status-item.os i{color:#c9a84c}
+.status-item.auth i{color:#378ADD}
+
+.footer{text-align:center;margin-top:32px;font-size:11px;color:#3a3930;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="title">
+<h1>ISRA</h1>
+<p>Intelligent software removal agent · system architecture</p>
+</div>
+
+<div class="layer layer-dash">
+<div class="layer-head">
+<div class="layer-icon blue"><i class="ti ti-device-desktop-analytics"></i></div>
+<span class="layer-name">Dashboard</span>
+<span class="layer-tech">Next.js 16 · Vercel · Realtime</span>
+</div>
+<div class="cards cards-3">
+<div class="card">
+<i class="ti ti-apps card-icon blue"></i>
+<div><div class="card-title">Apps</div><div class="card-desc">All software across every endpoint — filtered to active</div></div>
+</div>
+<div class="card">
+<i class="ti ti-server-2 card-icon blue"></i>
+<div><div class="card-title">Fleet</div><div class="card-desc">Endpoint status, last sync, health monitoring</div></div>
+</div>
+<div class="card">
+<i class="ti ti-list-check card-icon blue"></i>
+<div><div class="card-title">Logs</div><div class="card-desc">Removal history with live execution timeline</div></div>
+</div>
+</div>
+</div>
+
+<div class="connector">
+<div class="conn-line">
+<div class="flow-dot" style="background:#378ADD"></div>
+<div class="flow-track"><div class="particle" style="background:#378ADD"></div></div>
+<div class="conn-label"><i class="ti ti-arrows-exchange" style="color:#378ADD"></i>REST API + Supabase realtime</div>
+<div class="flow-track up"><div class="particle" style="background:#1D9E75"></div></div>
+<div class="flow-dot up" style="background:#1D9E75"></div>
+</div>
+</div>
+
+<div class="layer layer-supa">
+<div class="layer-head">
+<div class="layer-icon green"><i class="ti ti-database"></i></div>
+<span class="layer-name">Supabase</span>
+<span class="layer-tech">PostgreSQL · Row level security</span>
+</div>
+<div class="cards cards-3">
+<div class="card">
+<i class="ti ti-package card-icon green"></i>
+<div><div class="card-title">inventory</div><div class="card-desc">Software artifacts per endpoint</div>
+<div class="pill green">isra.inventory</div></div>
+</div>
+<div class="card">
+<i class="ti ti-cpu card-icon green"></i>
+<div><div class="card-title">endpoints</div><div class="card-desc">Registered server machines</div>
+<div class="pill green">isra.endpoints</div></div>
+</div>
+<div class="card">
+<i class="ti ti-subtask card-icon green"></i>
+<div><div class="card-title">removal_tasks</div><div class="card-desc">Job queue + execution history</div>
+<div class="pill green">isra.removal_tasks</div></div>
+</div>
+</div>
+</div>
+
+<div class="connector">
+<div class="conn-line">
+<div class="flow-dot" style="background:#c9a84c"></div>
+<div class="flow-track"><div class="particle" style="background:#c9a84c"></div></div>
+<div class="conn-label"><i class="ti ti-transfer-in" style="color:#c9a84c"></i>Push inventory · Pull removal jobs</div>
+<div class="flow-track up"><div class="particle" style="background:#1D9E75"></div></div>
+<div class="flow-dot up" style="background:#1D9E75"></div>
+</div>
+</div>
+
+<div class="layer layer-agent">
+<div class="layer-head">
+<div class="layer-icon gold"><i class="ti ti-robot"></i></div>
+<span class="layer-name">ISRA agent</span>
+<span class="layer-tech">Python · FastAPI · systemd · .deb / .rpm</span>
+</div>
+<div class="cards cards-2">
+<div class="card">
+<i class="ti ti-radar-2 card-icon gold"></i>
+<div><div class="card-title">Collectors</div><div class="card-desc">Scans apt, snap, pip, npm, AppImage, desktop apps — every 5 minutes</div>
+<div class="pill gold">package_collector.py</div></div>
+</div>
+<div class="card">
+<i class="ti ti-brain card-icon gold"></i>
+<div><div class="card-title">Intelligence</div><div class="card-desc">Normalizer, inventory mapping, policy engine rules</div>
+<div class="pill gold">AI-powered analysis</div></div>
+</div>
+</div>
+
+<div class="section-label"><i class="ti ti-git-merge"></i> Executor pipeline</div>
+
+<div class="exec-pipeline">
+<div class="exec-step">
+<i class="ti ti-clipboard-list" style="color:#378ADD"></i>
+<span class="step-name">Planner</span>
+<span class="step-desc">Build removal plan</span>
+</div>
+<div class="exec-arrow">
+<svg width="40" height="16"><line x1="4" y1="8" x2="36" y2="8" class="arrow-flow" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round"/><polygon points="32,4 38,8 32,12" fill="#c9a84c" opacity="0.7"/></svg>
+</div>
+<div class="exec-step">
+<i class="ti ti-player-play" style="color:#c9a84c"></i>
+<span class="step-name">Runner</span>
+<span class="step-desc">Execute commands</span>
+</div>
+<div class="exec-arrow">
+<svg width="40" height="16"><line x1="4" y1="8" x2="36" y2="8" class="arrow-flow" stroke="#c9a84c" stroke-width="1.5" fill="none" stroke-linecap="round"/><polygon points="32,4 38,8 32,12" fill="#c9a84c" opacity="0.7"/></svg>
+</div>
+<div class="exec-step">
+<i class="ti ti-circle-check" style="color:#1D9E75"></i>
+<span class="step-name">Verifier</span>
+<span class="step-desc">Confirm removal</span>
+</div>
+</div>
+
+<div class="shield">
+<div class="shield-title"><i class="ti ti-shield-lock"></i> Policy engine — protected software</div>
+<div class="shield-desc">Blocks kernel, systemd, libc, glibc — cannot be queued for removal under any condition. Enforced before executor pipeline.</div>
+</div>
+
+<div class="status-bar">
+<div class="status-item auth"><i class="ti ti-key"></i> Token auth: viewer + operator</div>
+<div class="status-item secure"><i class="ti ti-lock"></i> Secrets isolated from child processes</div>
+<div class="status-item os"><i class="ti ti-brand-ubuntu"></i> RHEL · Ubuntu · Oracle Linux</div>
+</div>
+</div>
+
+<div class="footer">ISRA v0.1.0 · github.com/pratapme1/ISRA · Vishnu Pratap Kumar</div>
+</div>
+</body>
+</html>

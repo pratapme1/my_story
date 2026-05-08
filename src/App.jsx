@@ -365,9 +365,8 @@ function SceneProve({ onNext }) {
                 <div className="gold-lbl" style={{ color:T.green, marginBottom:10 }}>LIVE NOW</div>
                 <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:7 }}>
                   {[
-                    'Linux removal agent deployed — RHEL + Ubuntu',
+                    'Linux removal agent and demo-ready',
                     'Server dashboard built and demo-ready',
-                    'SNOW SAM Pro migration in progress — discovery + removal scope aligned',
                   ].map((item, i) => (
                     <li key={i} style={{ display:'flex', gap:7, alignItems:'flex-start' }}>
                       <span style={{ color:T.green, flexShrink:0, fontSize:7, marginTop:3, lineHeight:1 }}>▸</span>
@@ -443,7 +442,7 @@ function SceneBuild({ onNext }) {
               color:T.cream, lineHeight:1.12,
             }}>
               Same governance. New environment. Higher stakes.<br/>
-              <span style={{ fontSize:'clamp(14px,1.7vw,22px)', color:T.green }}>Linux agent live · SNOW migration underway.</span>
+              <span style={{ fontSize:'clamp(14px,1.7vw,22px)', color:T.green }}>Linux agent live · Demo-ready.</span>
             </div>
           </div>
         )}
