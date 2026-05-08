@@ -410,6 +410,256 @@ export function WorkstreamSignal({ color }) {
   );
 }
 
+// ── Icon helpers (plain functions, not React components) ─────────
+const iconMonitor = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="-10" y="-8" width="20" height="14" rx="2"/>
+    <line x1="0" y1="6" x2="0" y2="10"/>
+    <line x1="-5" y1="10" x2="5" y2="10"/>
+  </g>
+);
+const iconDatabase = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round">
+    <ellipse cx="0" cy="-5" rx="10" ry="3.8"/>
+    <path d="M-10,-5 L-10,5 A10,3.8 0 0,0 10,5 L10,-5"/>
+    <path d="M-10,-1 A10,3.8 0 0,0 10,-1" strokeDasharray="3 2"/>
+  </g>
+);
+const iconServer = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round">
+    <rect x="-10" y="-9" width="20" height="8" rx="2"/>
+    <rect x="-10" y="1" width="20" height="8" rx="2"/>
+    <circle cx="-5.5" cy="-5" r="1.8" fill={c} stroke="none"/>
+    <circle cx="-5.5" cy="5" r="1.8" fill={c} stroke="none"/>
+    <line x1="-1" y1="-5" x2="6" y2="-5" strokeWidth="1.2"/>
+    <line x1="-1" y1="5" x2="6" y2="5" strokeWidth="1.2"/>
+  </g>
+);
+const iconApps = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round">
+    <rect x="-9" y="-9" width="7" height="7" rx="1.5"/>
+    <rect x="2" y="-9" width="7" height="7" rx="1.5"/>
+    <rect x="-9" y="2" width="7" height="7" rx="1.5"/>
+    <rect x="2" y="2" width="7" height="7" rx="1.5"/>
+  </g>
+);
+const iconTable = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round">
+    <rect x="-10" y="-8" width="20" height="16" rx="2"/>
+    <line x1="-10" y1="-2" x2="10" y2="-2"/>
+    <line x1="0" y1="-8" x2="0" y2="8"/>
+  </g>
+);
+const iconQueue = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round">
+    <line x1="-9" y1="-6" x2="9" y2="-6"/>
+    <line x1="-9" y1="0" x2="9" y2="0"/>
+    <line x1="-9" y1="6" x2="5" y2="6"/>
+    <polyline points="6,3 10,6 6,9"/>
+  </g>
+);
+const iconRobot = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round">
+    <rect x="-9" y="-7" width="18" height="14" rx="3"/>
+    <circle cx="-3.5" cy="-1.5" r="2.2" fill={c} stroke="none" opacity="0.75"/>
+    <circle cx="3.5" cy="-1.5" r="2.2" fill={c} stroke="none" opacity="0.75"/>
+    <path d="M-3,4 Q0,6.5 3,4" strokeWidth="1.3"/>
+    <line x1="0" y1="-7" x2="0" y2="-11"/>
+    <circle cx="0" cy="-12.5" r="1.8" fill={c} stroke="none"/>
+  </g>
+);
+const iconBrain = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.5" strokeLinecap="round">
+    <path d="M0,-9 C-6,-9 -10,-5 -10,0 C-10,5 -6,9 0,9 C6,9 10,5 10,0 C10,-5 6,-9 0,-9"/>
+    <line x1="0" y1="-9" x2="0" y2="9" strokeDasharray="2 2"/>
+    <line x1="-6" y1="-4" x2="6" y2="-4" strokeWidth="1.1"/>
+    <line x1="-8" y1="1" x2="8" y2="1" strokeWidth="1.1"/>
+    <line x1="-6" y1="5" x2="6" y2="5" strokeWidth="1.1"/>
+  </g>
+);
+const iconShield = (c) => (
+  <g fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M0,-10 L9,-6 L9,2 C9,7 5,11 0,13 C-5,11 -9,7 -9,2 L-9,-6 Z"/>
+    <line x1="0" y1="-3" x2="0" y2="4" strokeWidth="2"/>
+    <circle cx="0" cy="7" r="1.5" fill={c} stroke="none"/>
+  </g>
+);
+
+export function ISRAArchitecture({ phase = 6 }) {
+  // Zone y bounds
+  const DY1=0, DY2=148;           // Dashboard
+  const G1Y1=148, G1Y2=222;       // Gap 1
+  const SY1=222, SY2=368;         // Supabase
+  const G2Y1=368, G2Y2=442;       // Gap 2
+  const AY1=442, AY2=520;         // Agent
+
+  const DCY = (DY1+DY2)/2 + 8;   // Dashboard box center y
+  const SCY = (SY1+SY2)/2 + 6;   // Supabase box center y
+  const ACY = (AY1+AY2)/2 + 2;   // Agent box center y
+
+  const BOX_H = 82;
+
+  // Draws a component box with icon + labels
+  const box = (cx, cy, w, color, label, sub, iconFn, pill) => {
+    const bx = cx - w/2, by = cy - BOX_H/2;
+    const ix = bx + 34, iy = cy - 2;
+    const tx = bx + 60;
+    return (
+      <g>
+        <rect x={bx} y={by} width={w} height={BOX_H} rx={8}
+          fill="rgba(4,4,8,.88)" stroke={`${color}28`} strokeWidth={1}/>
+        <rect x={bx} y={by} width={w} height={BOX_H} rx={8}
+          fill={`${color}05`}/>
+        <circle cx={ix} cy={iy} r={20} fill={`${color}12`}
+          style={{ animation:"pulseGlow 3.2s ease-in-out infinite" }}/>
+        <g transform={`translate(${ix},${iy})`}>{iconFn(color)}</g>
+        <text x={tx} y={cy-8} fontFamily="IBM Plex Mono" fontSize={9}
+          fontWeight="500" letterSpacing={1.8} fill={color}>{label}</text>
+        <text x={tx} y={cy+7} fontFamily="IBM Plex Mono" fontSize={7.2}
+          fill="rgba(237,233,224,.55)">{sub}</text>
+        {pill && (
+          <text x={tx} y={cy+20} fontFamily="IBM Plex Mono" fontSize={6.5}
+            fill={`${color}55`} letterSpacing={0.4}>{pill}</text>
+        )}
+      </g>
+    );
+  };
+
+  // Zone band background + labels
+  const zone = (y1, y2, color, label, tech) => (
+    <g>
+      <rect x={8} y={y1+3} width={1004} height={y2-y1-6} rx={10}
+        fill={`${color}05`} stroke={`${color}22`} strokeWidth={1}/>
+      <text x={24} y={y1+20} fontFamily="IBM Plex Mono" fontSize={8.5}
+        fontWeight="600" letterSpacing={2.2} fill={color} opacity={0.85}>{label}</text>
+      <text x={996} y={y1+20} textAnchor="end" fontFamily="IBM Plex Mono"
+        fontSize={7} fill="rgba(237,233,224,.24)" letterSpacing={0.6}>{tech}</text>
+    </g>
+  );
+
+  // Bidirectional animated connection between two zones
+  const conn = (y1, y2, cDown, cUp, label) => {
+    const mx = 510, lx = mx-14, rx = mx+14, h = y2-y1;
+    const midy = (y1+y2)/2;
+    return (
+      <g style={{ animation:"fade .5s ease both" }}>
+        <line x1={lx} y1={y1} x2={lx} y2={y2}
+          stroke={`${cDown}35`} strokeWidth={1} strokeDasharray="4 3"/>
+        <polygon points={`${lx-4},${y2-9} ${lx+4},${y2-9} ${lx},${y2-1}`}
+          fill={`${cDown}80`}/>
+        <line x1={rx} y1={y1} x2={rx} y2={y2}
+          stroke={`${cUp}35`} strokeWidth={1} strokeDasharray="4 3"/>
+        <polygon points={`${rx-4},${y1+9} ${rx+4},${y1+9} ${rx},${y1+1}`}
+          fill={`${cUp}80`}/>
+        <circle cx={lx} r={4} fill={cDown} opacity={0.9}>
+          <animateMotion dur="1.7s" repeatCount="indefinite" path={`M0,0 L0,${h}`}/>
+        </circle>
+        <circle cx={rx} r={4} fill={cUp} opacity={0.9}>
+          <animateMotion dur="1.7s" repeatCount="indefinite" begin="0.85s" path={`M0,${h} L0,0`}/>
+        </circle>
+        <rect x={mx-76} y={midy-10} width={152} height={20} rx={4}
+          fill="rgba(4,4,8,.94)" stroke="rgba(237,233,224,.1)" strokeWidth={1}/>
+        <text x={mx} y={midy+4} textAnchor="middle" fontFamily="IBM Plex Mono"
+          fontSize={7.2} fill="rgba(237,233,224,.45)" letterSpacing={0.6}>{label}</text>
+      </g>
+    );
+  };
+
+  return (
+    <svg viewBox="0 0 1020 520" width="100%" style={{ display:"block", overflow:"visible" }}>
+      <defs>
+        <filter id="israglo" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      {/* ── DASHBOARD ── */}
+      {phase >= 1 && (
+        <g style={{ animation:"nodeIn .55s ease both" }}>
+          {zone(DY1, DY2, T.blue, "DASHBOARD", "Next.js · Vercel · Supabase Realtime")}
+          {box(175, DCY, 268, T.blue, "APPS",  "Software inventory · Active filter",     iconApps,    null)}
+          {box(510, DCY, 268, T.blue, "FLEET", "Endpoint status · Health monitoring",    iconMonitor, null)}
+          {box(845, DCY, 268, T.blue, "LOGS",  "Removal history · Live execution",       iconTable,   null)}
+        </g>
+      )}
+
+      {/* ── CONNECTION 1: Dashboard ↔ Supabase ── */}
+      {phase >= 2 && conn(G1Y1, G1Y2, T.blue, T.green, "REST API · Supabase Realtime")}
+
+      {/* ── SUPABASE ── */}
+      {phase >= 3 && (
+        <g style={{ animation:"nodeIn .55s ease both" }}>
+          {zone(SY1, SY2, T.green, "SUPABASE", "PostgreSQL · Row Level Security")}
+          {box(175, SCY, 274, T.green, "isra.inventory",     "Software artifacts per endpoint",  iconDatabase, "isra.inventory")}
+          {box(510, SCY, 274, T.green, "isra.endpoints",     "Registered server machines",        iconServer,   "isra.endpoints")}
+          {box(845, SCY, 280, T.green, "isra.removal_tasks", "Job queue · Execution history",     iconQueue,    "isra.removal_tasks")}
+        </g>
+      )}
+
+      {/* ── CONNECTION 2: Supabase ↔ Agent ── */}
+      {phase >= 4 && conn(G2Y1, G2Y2, T.gold, T.gold, "Push inventory · Pull removal jobs")}
+
+      {/* ── ISRA AGENT ── */}
+      {phase >= 5 && (
+        <g style={{ animation:"nodeIn .55s ease both" }}>
+          {zone(AY1, AY2, T.gold, "ISRA AGENT", "Python · FastAPI · systemd · .deb / .rpm")}
+
+          {/* Pipeline steps */}
+          {[
+            { cx:88,  w:118, label:"COLLECT",      sub:"apt snap pip npm",  color:T.gold,  icon:iconRobot },
+            { cx:248, w:138, label:"INTELLIGENCE",  sub:"Normalize · AI",    color:T.gold,  icon:iconBrain },
+            { cx:422, w:118, label:"PLAN",          sub:"Build plan",        color:T.blue,  icon:iconApps  },
+            { cx:578, w:108, label:"RUN",           sub:"Execute",           color:T.gold,  icon:iconServer},
+            { cx:730, w:118, label:"VERIFY",        sub:"Confirm removal",   color:T.green, icon:iconTable },
+          ].map((s, i, arr) => {
+            const by = AY1 + 10, bh = AY2 - AY1 - 20;
+            const bx = s.cx - s.w/2;
+            return (
+              <g key={s.label}>
+                <rect x={bx} y={by} width={s.w} height={bh} rx={7}
+                  fill="rgba(4,4,8,.88)" stroke={`${s.color}30`} strokeWidth={1}/>
+                <rect x={bx} y={by} width={s.w} height={bh} rx={7}
+                  fill={`${s.color}06`}/>
+                <circle cx={s.cx} cy={AY1+32} r={16} fill={`${s.color}14`}
+                  style={{ animation:"pulseGlow 3.2s ease-in-out infinite" }}/>
+                <g transform={`translate(${s.cx},${AY1+32})`}>{s.icon(s.color)}</g>
+                <text x={s.cx} y={AY1+54} textAnchor="middle" fontFamily="IBM Plex Mono"
+                  fontSize={8} fontWeight="500" letterSpacing={1.5} fill={s.color}>{s.label}</text>
+                <text x={s.cx} y={AY1+66} textAnchor="middle" fontFamily="IBM Plex Mono"
+                  fontSize={6.8} fill="rgba(237,233,224,.5)">{s.sub}</text>
+                {i < arr.length-1 && (
+                  <g>
+                    <line x1={s.cx+s.w/2+2} y1={ACY} x2={arr[i+1].cx-arr[i+1].w/2-10} y2={ACY}
+                      stroke={`${T.gold}55`} strokeWidth={1.5} strokeDasharray="4 3"
+                      style={{ animation:"arrowMove .8s linear infinite" }}/>
+                    <polygon
+                      points={`${arr[i+1].cx-arr[i+1].w/2-14},${ACY-4} ${arr[i+1].cx-arr[i+1].w/2-4},${ACY} ${arr[i+1].cx-arr[i+1].w/2-14},${ACY+4}`}
+                      fill={`${T.gold}80`}/>
+                  </g>
+                )}
+              </g>
+            );
+          })}
+
+          {/* Policy Engine */}
+          {phase >= 6 && (
+            <g style={{ animation:"nodeIn .45s ease both" }}>
+              <rect x={852} y={AY1+10} width={160} height={AY2-AY1-20} rx={7}
+                fill="rgba(248,113,113,.07)" stroke={`${T.red}35`} strokeWidth={1}/>
+              <g transform={`translate(${932},${AY1+32})`}>{iconShield(T.red)}</g>
+              <text x={932} y={AY1+54} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={7.5} fontWeight="500" letterSpacing={1.5} fill={T.red}>POLICY ENGINE</text>
+              <text x={932} y={AY1+66} textAnchor="middle" fontFamily="IBM Plex Mono"
+                fontSize={6.5} fill="rgba(248,113,113,.55)">kernel · libc · glibc</text>
+            </g>
+          )}
+        </g>
+      )}
+    </svg>
+  );
+}
+
 export function Gauge({ value, color }) {
   const r = 28, c = 2 * Math.PI * r;
   return (

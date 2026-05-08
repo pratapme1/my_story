@@ -2,7 +2,7 @@ import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { motion } from 'framer-motion';
-import { KnowledgeGraph, GovernancePipeline, ServerAdditions } from './components/SVGs';
+import { KnowledgeGraph, GovernancePipeline, ServerAdditions, ISRAArchitecture } from './components/SVGs';
 
 // ── TOKENS ────────────────────────────────────────────────────────
 const T = {
@@ -794,58 +794,24 @@ function SceneISRA({ onNext }) {
   useEffect(() => {
     const ts = [
       setTimeout(() => setPh(1), 300),
-      setTimeout(() => setPh(2), 800),
-      setTimeout(() => setPh(3), 1500),
-      setTimeout(() => setPh(4), 2200),
-      setTimeout(() => setPh(5), 2900),
-      setTimeout(() => setPh(6), 3600),
+      setTimeout(() => setPh(2), 900),
+      setTimeout(() => setPh(3), 1700),
+      setTimeout(() => setPh(4), 2500),
+      setTimeout(() => setPh(5), 3200),
+      setTimeout(() => setPh(6), 3900),
     ];
     return () => ts.forEach(clearTimeout);
   }, []);
 
-  const layer = (color, name, tech, children, anim) => (
-    <div style={{
-      border:`1px solid ${color}20`, borderTop:`2px solid ${color}`,
-      borderRadius:10, padding:'clamp(14px,1.8vw,20px)',
-      background:'rgba(4,4,8,.92)', backdropFilter:'blur(18px)',
-      animation: anim || 'rise .5s ease both',
-    }}>
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:14, flexWrap:'wrap', gap:8 }}>
-        <div className="gold-lbl" style={{ color, marginBottom:0 }}>{name}</div>
-        <div className="lbl" style={{ color:'rgba(237,233,224,.28)', fontSize:'clamp(7px,.75vw,8.5px)' }}>{tech}</div>
-      </div>
-      {children}
-    </div>
-  );
-
-  const miniCard = (color, title, desc, pill) => (
-    <div style={{ background:'rgba(237,233,224,.025)', border:'1px solid rgba(237,233,224,.07)', borderRadius:8, padding:'clamp(10px,1.2vw,14px)' }}>
-      <div className="lbl" style={{ color, marginBottom:5, fontSize:'clamp(7.5px,.82vw,9.5px)' }}>{title}</div>
-      <div style={{ fontSize:'clamp(9px,1vw,11px)', color:T.muted, lineHeight:1.6 }}>{desc}</div>
-      {pill && (
-        <div style={{ display:'inline-block', marginTop:6, fontFamily:"'IBM Plex Mono',monospace", fontSize:'clamp(6.5px,.72vw,8px)', color, background:`${color}12`, padding:'2px 8px', borderRadius:3, letterSpacing:'.04em' }}>{pill}</div>
-      )}
-    </div>
-  );
-
-  const connector = (label) => (
-    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:40, position:'relative' }}>
-      <div style={{ position:'absolute', width:1, height:'100%', background:'rgba(237,233,224,.08)' }}/>
-      <div className="lbl" style={{ background:'rgba(4,4,8,.95)', padding:'3px 12px', borderRadius:3, zIndex:1, color:'rgba(237,233,224,.32)', fontSize:'clamp(6.5px,.72vw,8px)' }}>
-        {label}
-      </div>
-    </div>
-  );
-
   return (
-    <div className="scene-scroll" onClick={onNext}>
-      <div className="inner">
+    <div className="scene" onClick={onNext} style={{ cursor:'pointer' }}>
+      <div className="inner" style={{ padding:'clamp(10px,2vh,24px) clamp(20px,3.5vw,48px)' }}>
 
         {ph >= 1 && (
-          <div style={{ marginBottom:'clamp(12px,2vh,20px)', animation:'rise .5s ease both' }}>
+          <div style={{ marginBottom:'clamp(8px,1.4vh,14px)', animation:'rise .5s ease both' }}>
             <div className="gold-lbl">ISRA · SYSTEM ARCHITECTURE</div>
             <div style={{ display:'flex', alignItems:'baseline', justifyContent:'space-between', flexWrap:'wrap', gap:12 }}>
-              <div className="serif" style={{ fontSize:'clamp(22px,3.2vw,40px)', fontWeight:300, fontStyle:'italic', color:T.cream, lineHeight:1.12 }}>
+              <div className="serif" style={{ fontSize:'clamp(18px,2.4vw,32px)', fontWeight:300, fontStyle:'italic', color:T.cream, lineHeight:1.12 }}>
                 The stack behind the agent.
               </div>
               <div className="lbl" style={{ lineHeight:1.9, textAlign:'right', fontSize:'clamp(6.5px,.72vw,8px)' }}>
@@ -855,87 +821,9 @@ function SceneISRA({ onNext }) {
           </div>
         )}
 
-        {/* ── DASHBOARD ── */}
-        {ph >= 2 && layer(T.blue, 'DASHBOARD', 'Next.js · Vercel · Supabase Realtime',
-          <div className="grid-3">
-            {miniCard(T.blue, 'APPS',  'All software across every endpoint — filtered to active')}
-            {miniCard(T.blue, 'FLEET', 'Endpoint status, last sync, health monitoring')}
-            {miniCard(T.blue, 'LOGS',  'Removal history with live execution timeline')}
-          </div>
-        )}
+        <ISRAArchitecture phase={ph}/>
 
-        {ph >= 3 && connector('REST API + Supabase Realtime  ↕')}
-
-        {/* ── SUPABASE ── */}
-        {ph >= 3 && layer(T.green, 'SUPABASE', 'PostgreSQL · Row Level Security',
-          <div className="grid-3">
-            {miniCard(T.green, 'isra.inventory',     'Software artifacts per endpoint',    'isra.inventory')}
-            {miniCard(T.green, 'isra.endpoints',     'Registered server machines',          'isra.endpoints')}
-            {miniCard(T.green, 'isra.removal_tasks', 'Job queue + execution history',       'isra.removal_tasks')}
-          </div>
-        )}
-
-        {ph >= 4 && connector('Push inventory · Pull removal jobs  ↕')}
-
-        {/* ── ISRA AGENT ── */}
-        {ph >= 4 && layer(T.gold, 'ISRA AGENT', 'Python · FastAPI · systemd · .deb / .rpm',
-          <>
-            <div className="grid-2" style={{ marginBottom:'clamp(10px,1.4vh,14px)' }}>
-              {miniCard(T.gold, 'COLLECTORS',   'Scans apt, snap, pip, npm, AppImage — every 5 minutes', 'package_collector.py')}
-              {miniCard(T.gold, 'INTELLIGENCE', 'Normalizer, inventory mapping, AI-powered policy engine', 'AI-powered analysis')}
-            </div>
-
-            {ph >= 5 && (
-              <div style={{ animation:'rise .5s ease both', marginBottom:'clamp(10px,1.4vh,14px)' }}>
-                <div className="lbl" style={{ marginBottom:10, color:'rgba(237,233,224,.28)' }}>EXECUTOR PIPELINE</div>
-                <div style={{ display:'flex', alignItems:'stretch' }}>
-                  {[
-                    { label:'PLANNER',  desc:'Build removal plan',  color:T.blue  },
-                    { label:'RUNNER',   desc:'Execute commands',     color:T.gold  },
-                    { label:'VERIFIER', desc:'Confirm removal',      color:T.green },
-                  ].map((s, i, arr) => (
-                    <React.Fragment key={s.label}>
-                      <div style={{ flex:1, textAlign:'center', padding:'clamp(10px,1.2vw,14px) 8px', background:'rgba(237,233,224,.02)', border:'1px solid rgba(237,233,224,.06)', borderRadius:8 }}>
-                        <div className="lbl" style={{ color:s.color, marginBottom:4, fontSize:'clamp(7.5px,.82vw,9px)' }}>{s.label}</div>
-                        <div style={{ fontSize:'clamp(9px,1vw,10.5px)', color:T.muted }}>{s.desc}</div>
-                      </div>
-                      {i < arr.length - 1 && (
-                        <div style={{ display:'flex', alignItems:'center', padding:'0 6px', flexShrink:0 }}>
-                          <svg width="28" height="16" style={{ overflow:'visible' }}>
-                            <line x1="2" y1="8" x2="22" y2="8" stroke={`${T.gold}70`} strokeWidth="1.5" strokeDasharray="4 3" style={{ animation:'arrowMove .8s linear infinite' }} fill="none"/>
-                            <polygon points="18,4 24,8 18,12" fill={`${T.gold}80`}/>
-                          </svg>
-                        </div>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {ph >= 6 && (
-              <div style={{ animation:'rise .5s ease both' }}>
-                <div style={{ borderLeft:`3px solid ${T.red}`, padding:'clamp(10px,1.2vw,12px) clamp(12px,1.5vw,16px)', background:`rgba(248,113,113,.04)`, borderRadius:'0 6px 6px 0', marginBottom:10 }}>
-                  <div className="lbl" style={{ color:T.red, marginBottom:4 }}>POLICY ENGINE — PROTECTED SOFTWARE</div>
-                  <div style={{ fontSize:'clamp(9px,1vw,11px)', color:T.muted, lineHeight:1.6 }}>
-                    Blocks kernel, systemd, libc, glibc — enforced before executor pipeline. Cannot be queued for removal under any condition.
-                  </div>
-                </div>
-                <div style={{ display:'flex', gap:'clamp(12px,2vw,24px)', flexWrap:'wrap', padding:'clamp(8px,1vw,10px) clamp(12px,1.5vw,16px)', background:'rgba(237,233,224,.02)', border:'1px solid rgba(237,233,224,.05)', borderRadius:6 }}>
-                  {[
-                    { t:'Token auth · viewer + operator',         c:T.blue  },
-                    { t:'Secrets isolated from child processes',   c:T.green },
-                    { t:'RHEL · Ubuntu · Oracle Linux',            c:T.gold  },
-                  ].map((item,i) => (
-                    <div key={i} className="lbl" style={{ color:item.c, fontSize:'clamp(6.5px,.72vw,8.5px)' }}>{item.t}</div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
-        )}
-
-        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+        <div style={{ marginTop:8, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
           <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
           <div className="lbl">CLICK TO CONTINUE →</div>
         </div>
