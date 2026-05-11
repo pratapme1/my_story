@@ -487,6 +487,30 @@ function SceneSCA() {
     <div className="scene" style={{ cursor:'default' }}>
       <div className="inner">
 
+        {/* Demo link */}
+        <div className="card" style={{
+          background:'rgba(201,169,110,.08)',
+          border:'1px solid rgba(201,169,110,.3)',
+          marginBottom:'clamp(14px,2vh,20px)',
+          textAlign:'center',
+        }}>
+          <a
+            href="https://sca-dashboard.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily:'IBM Plex Mono,monospace',
+              fontSize:'clamp(9px,1vw,12px)',
+              letterSpacing:'.18em',
+              textTransform:'uppercase',
+              color:T.gold,
+              textDecoration:'none',
+            }}
+          >
+            👉 LIVE DEMO: sca-dashboard.vercel.app
+          </a>
+        </div>
+
         {/* Header */}
         {ph >= 1 && (
           <div style={{ marginBottom:'clamp(16px,2.5vh,26px)', animation:'rise .6s ease both' }}>
