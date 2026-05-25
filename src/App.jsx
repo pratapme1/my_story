@@ -121,13 +121,21 @@ body { background:#000; color:#EDE9E0; font-family:system-ui,sans-serif; -webkit
 .play-btn:hover { border-color:rgba(201,169,110,.85); transform:scale(1.08); }
 `;
 
-// ── SCENE METADATA ────────────────────────────────────────────────
-const META = [
+// ── DECK METADATA ─────────────────────────────────────────────────
+const MY_STORY_META = [
   { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.5) 0%,rgba(8,5,2,.78) 100%)',         label:'OPEN'   },
   { bg:'/bg-story-search.png',    scrim:'linear-gradient(160deg,rgba(75,40,5,.26) 0%,rgba(0,0,0,.84) 100%)',       label:'SEARCH' },
   { bg:'/bg-story-prove.png',     scrim:'linear-gradient(160deg,rgba(15,35,90,.26) 0%,rgba(0,0,0,.86) 100%)',      label:'PROVE'  },
   { bg:'/bg-cinematic-build.png', scrim:'linear-gradient(160deg,rgba(5,12,70,.3) 0%,rgba(0,0,0,.84) 100%)',        label:'BUILD'  },
   { bg:'/bg-story-dash.png',      scrim:'linear-gradient(160deg,rgba(0,14,32,.42) 0%,rgba(0,0,0,.92) 100%)',       label:'SCA'    },
+  { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.62) 0%,rgba(8,5,2,.92) 100%)',         label:'END'    },
+];
+
+const SALES_GENIE_META = [
+  { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.52) 0%,rgba(8,5,2,.82) 100%)',         label:'OPEN'   },
+  { bg:'/bg-story-search.png',    scrim:'linear-gradient(160deg,rgba(75,40,5,.2) 0%,rgba(0,0,0,.86) 100%)',        label:'SEARCH' },
+  { bg:'/bg-story-prove.png',     scrim:'linear-gradient(160deg,rgba(15,35,90,.24) 0%,rgba(0,0,0,.88) 100%)',      label:'PROVE'  },
+  { bg:'/bg-cinematic-build.png', scrim:'linear-gradient(160deg,rgba(5,46,34,.28) 0%,rgba(0,0,0,.88) 100%)',       label:'BUILD'  },
   { bg:'/bg-cinematic-open.png',  scrim:'linear-gradient(160deg,rgba(0,0,0,.62) 0%,rgba(8,5,2,.92) 100%)',         label:'END'    },
 ];
 
@@ -611,8 +619,606 @@ function SceneSCA() {
   );
 }
 
+// ── SALES GENIE — OPEN ────────────────────────────────────────────
+function SalesGenieOpen({ onNext }) {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 300),
+      setTimeout(() => setPh(2), 1000),
+      setTimeout(() => setPh(3), 1700),
+      setTimeout(() => setPh(4), 2350),
+      setTimeout(() => setPh(5), 3050),
+      setTimeout(() => setPh(6), 3900),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  const slide = (active) => ({
+    display:'block',
+    transform: active ? 'translateY(0)' : 'translateY(110%)',
+    transition:'transform .82s cubic-bezier(.22,1,.36,1)',
+  });
+
+  return (
+    <div className="scene" onClick={ph >= 5 ? onNext : undefined}
+      style={{ cursor: ph >= 5 ? 'pointer' : 'default' }}>
+      <div style={{ maxWidth:'min(920px,100%)', width:'100%', padding:'0 clamp(24px,5vw,72px)', position:'relative', zIndex:5 }}>
+        <div style={{
+          overflow:'hidden', marginBottom: ph >= 2 ? 20 : 0,
+          opacity: ph >= 1 ? 1 : 0, transition:'opacity .6s ease',
+        }}>
+          <div className="serif" style={{
+            fontSize:'clamp(28px,4.2vw,58px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.25,
+            animation: ph >= 1 ? 'rise .75s ease both' : 'none',
+          }}>
+            Sales Genie. Agentic AI for CRM.
+          </div>
+          <div className="lbl" style={{ marginTop:10 }}>TEAM GENIEX · NEW HORIZONS 2025</div>
+        </div>
+
+        {ph >= 2 && (
+          <div style={{
+            height:1,
+            background:`linear-gradient(to right,${T.gold},transparent)`,
+            marginBottom:28,
+            animation:'growX .7s cubic-bezier(.22,1,.36,1) both',
+          }}/>
+        )}
+
+        <div className="serif" style={{
+          fontSize:'clamp(52px,8vw,114px)', fontWeight:700,
+          letterSpacing:'.03em', lineHeight:1.04, marginBottom:40,
+        }}>
+          {[
+            { w:'SEARCH.', p:3, col:T.cream },
+            { w:'PROVE.',  p:4, col:T.cream },
+            { w:'BUILD.',  p:5, col:T.gold  },
+          ].map(({w,p,col}) => (
+            <div key={w} style={{ overflow:'hidden', display:'block' }}>
+              <div style={{ color:col, ...slide(ph >= p) }}>{w}</div>
+            </div>
+          ))}
+        </div>
+
+        {ph >= 6 && (
+          <div style={{ display:'flex', justifyContent:'flex-end', animation:'fade 1s ease both' }}>
+            <div className="gold-lbl" style={{ cursor:'pointer' }}>CLICK → TO CONTINUE</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── SALES GENIE — SEARCH ──────────────────────────────────────────
+function SalesGenieSearch({ onNext }) {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 300),
+      setTimeout(() => setPh(2), 950),
+      setTimeout(() => setPh(3), 1650),
+      setTimeout(() => setPh(4), 2400),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  const strategicPath = [
+    'Reduce CRM administrative workload so teams can focus on strategic customer engagement.',
+    'Align CRM operations with GBS transformation goals and elevate CRM in the commercial ecosystem.',
+    'Define AI use cases, technical pathways, adoption guidelines, and scalable implementation practices.',
+    'Move CRM teams from reactive work toward proactive customer value creation.',
+  ];
+
+  const preparation = [
+    'Alignment with Project Owner',
+    'Alignment with AI @ GBS Strategy',
+    'Engagement with External Advisor Everest Group',
+    'Engagement with Hub Heads / CRM Leaders',
+  ];
+
+  const interviewFocus = [
+    'Understand current role',
+    'Identify pain points and challenges',
+    'Map current AI integrations',
+  ];
+
+  return (
+    <div className="scene-scroll" onClick={onNext}>
+      <div className="inner">
+        <motion.div initial="hidden" animate="visible" variants={stagger}
+          style={{ marginBottom:'clamp(16px,2.5vh,28px)' }}>
+          <motion.div variants={fadeUp} className="gold-lbl">01 // SEARCH · CRM FRICTION</motion.div>
+          <motion.div variants={fadeUp} className="serif" style={{
+            fontSize:'clamp(24px,3.6vw,50px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.12,
+          }}>
+            Find the administrative load.<br/><span style={{ color:T.gold }}>Turn it into AI opportunity.</span>
+          </motion.div>
+        </motion.div>
+
+        <div className="grid-2" style={{ alignItems:'stretch', marginBottom:'clamp(12px,1.8vh,16px)' }}>
+          <div className="card" style={{
+            borderTop:`4px solid ${T.gold}`,
+            opacity: ph >= 1 ? 1 : 0,
+            transform: ph >= 1 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.gold, marginBottom:8 }}>PURPOSE AND STRATEGIC PATH</div>
+            <ul style={{ listStyle:'none', display:'flex', flexDirection:'column', gap:10 }}>
+              {strategicPath.map(item => (
+                <li key={item} style={{ display:'flex', gap:9, alignItems:'flex-start' }}>
+                  <span style={{ color:T.gold, flexShrink:0, fontSize:8, marginTop:4 }}>▸</span>
+                  <span style={{ fontSize:'clamp(11px,1.15vw,13px)', color:T.muted, lineHeight:1.65 }}>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="card" style={{
+            borderTop:`4px solid ${T.green}`,
+            opacity: ph >= 2 ? 1 : 0,
+            transform: ph >= 2 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.green, marginBottom:10 }}>AI AGENT PROJECT PREPARATION</div>
+            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+              {preparation.map((step, i) => (
+                <div key={step} style={{ display:'grid', gridTemplateColumns:'24px 1fr', gap:9, alignItems:'center' }}>
+                  <div className="mono" style={{
+                    width:24, height:24, borderRadius:'50%', border:`1px solid ${T.green}`,
+                    display:'flex', alignItems:'center', justifyContent:'center',
+                    color:T.green, fontSize:9,
+                  }}>{i + 1}</div>
+                  <div style={{ fontSize:'clamp(10.5px,1.1vw,12.5px)', color:T.muted, lineHeight:1.45 }}>{step}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="card" style={{
+          opacity: ph >= 3 ? 1 : 0,
+          transform: ph >= 3 ? 'translateY(0)' : 'translateY(18px)',
+        }}>
+          <div className="grid-2" style={{ alignItems:'center' }}>
+            <div>
+              <div className="gold-lbl" style={{ marginBottom:10 }}>AI PLAYBOOK DESIGN · INTERVIEWS</div>
+              <div className="serif" style={{
+                fontSize:'clamp(20px,2.5vw,34px)', color:T.cream,
+                lineHeight:1.15, fontWeight:700, marginBottom:10,
+              }}>
+                Use interviews to spot AI opportunities.
+              </div>
+              <p style={{ fontSize:'clamp(11px,1.2vw,13px)', color:T.muted, lineHeight:1.65 }}>
+                Phase I starts by understanding CRM work directly from contributors, then translating repeated friction into use cases.
+              </p>
+            </div>
+            <div style={{ display:'grid', gap:10 }}>
+              {interviewFocus.map((item, i) => (
+                <div key={item} style={{
+                  border:`1px solid ${i === 1 ? 'rgba(201,169,110,.34)' : T.line}`,
+                  borderRadius:7,
+                  padding:'11px 12px',
+                  background:i === 1 ? 'rgba(201,169,110,.07)' : 'rgba(237,233,224,.035)',
+                }}>
+                  <div className="lbl" style={{ color:i === 1 ? T.gold : 'rgba(237,233,224,.36)' }}>0{i + 1}</div>
+                  <div style={{ color:T.cream, fontSize:'clamp(12px,1.25vw,14px)', lineHeight:1.45 }}>{item}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+          <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
+          <div className="lbl">CLICK TO CONTINUE →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SALES GENIE — PROVE ───────────────────────────────────────────
+function SalesGenieProve({ onNext }) {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 250),
+      setTimeout(() => setPh(2), 900),
+      setTimeout(() => setPh(3), 1600),
+      setTimeout(() => setPh(4), 2350),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  const lifecycleRows = [
+    ['AI use cases', 'Document CRM opportunities for agentic AI.'],
+    ['Data assessments', 'Identify the source material each use case depends on.'],
+    ['Agent behavior blueprint', 'Define how the AI agent should act within CRM workflows.'],
+  ];
+
+  const names = [
+    'Agustina Gonzalez',
+    'Gabriela Ruiz',
+    'Nicole Tüzüner',
+    'Swetha K',
+    'Venkat Amble · Project Owner',
+    'Jharana Mahanta · Coach',
+  ];
+
+  return (
+    <div className="scene-scroll" onClick={onNext}>
+      <div className="inner">
+        <motion.div initial="hidden" animate="visible" variants={stagger}
+          style={{ marginBottom:'clamp(16px,2.5vh,28px)' }}>
+          <motion.div variants={fadeUp} className="gold-lbl">02 // PROVE · AI PLAYBOOK</motion.div>
+          <motion.div variants={fadeUp} className="serif" style={{
+            fontSize:'clamp(24px,3.6vw,50px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.12,
+          }}>
+            Phase I turns interviews<br/><span style={{ color:T.gold }}>into a usable playbook.</span>
+          </motion.div>
+        </motion.div>
+
+        <div className="grid-3" style={{ marginBottom:'clamp(12px,1.8vh,16px)' }}>
+          <div className="card" style={{
+            borderTop:`4px solid ${T.gold}`,
+            opacity: ph >= 1 ? 1 : 0,
+            transform: ph >= 1 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.gold, marginBottom:10 }}>INTERVIEW MATERIAL</div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
+              {[
+                ['17+', 'meetings'],
+                ['20+', 'hours material'],
+                ['50+', 'alignment hours'],
+              ].map(([value, label]) => (
+                <div key={label}>
+                  <div className="serif" style={{ color:T.gold, fontWeight:700, fontSize:'clamp(24px,3vw,40px)', lineHeight:1 }}>{value}</div>
+                  <div className="lbl" style={{ fontSize:7.5, marginTop:4 }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card" style={{
+            borderTop:`4px solid ${T.blue}`,
+            opacity: ph >= 2 ? 1 : 0,
+            transform: ph >= 2 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.blue, marginBottom:10 }}>PHASE I OUTCOMES</div>
+            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+              {lifecycleRows.map(([title, body]) => (
+                <div key={title} style={{ borderTop:`1px solid ${T.line}`, paddingTop:9 }}>
+                  <div className="serif" style={{ color:T.cream, fontSize:'clamp(15px,1.55vw,20px)', lineHeight:1.15 }}>{title}</div>
+                  <div style={{ color:T.muted, fontSize:'clamp(10.5px,1.1vw,12.5px)', lineHeight:1.5, marginTop:4 }}>{body}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="card" style={{
+            borderTop:`4px solid ${T.green}`,
+            opacity: ph >= 3 ? 1 : 0,
+            transform: ph >= 3 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.green, marginBottom:10 }}>PROJECT GENIES</div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(2, minmax(0,1fr))', gap:8 }}>
+              {names.map((name, i) => (
+                <div key={name} style={{
+                  border:`1px solid ${T.line}`,
+                  borderRadius:6,
+                  padding:'9px 10px',
+                  background:'rgba(237,233,224,.035)',
+                }}>
+                  <div className="serif" style={{ fontSize:'clamp(13px,1.35vw,17px)', color:i >= 4 ? T.gold : T.cream, lineHeight:1.15 }}>{name}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="card" style={{
+          background:`linear-gradient(135deg,rgba(201,169,110,.08),rgba(0,0,0,.5))`,
+          borderColor:`rgba(201,169,110,.22)`,
+          opacity: ph >= 4 ? 1 : 0,
+          transition:'opacity .5s ease',
+        }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:20, flexWrap:'wrap' }}>
+            <div>
+              <div className="gold-lbl" style={{ marginBottom:8 }}>PHASE I</div>
+              <div className="serif" style={{ fontSize:'clamp(20px,2.5vw,34px)', color:T.cream, lineHeight:1.18, fontWeight:700 }}>
+                Defining the AI Agent Playbook.
+              </div>
+            </div>
+            <div className="lbl" style={{ lineHeight:1.9, textAlign:'right' }}>
+              interviews → outcomes<br/>use cases · data · behavior
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+          <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
+          <div className="lbl">CLICK TO CONTINUE →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SALES GENIE — BUILD ───────────────────────────────────────────
+function SalesGenieBuild({ onNext }) {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 300),
+      setTimeout(() => setPh(2), 900),
+      setTimeout(() => setPh(3), 1600),
+      setTimeout(() => setPh(4), 2400),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  const lifecycleRows = [
+    ['Pre-Sales', 'Engagement gaps & growth areas', 'Salesforce · GFB · iQuote · Intranet'],
+    ['Pre-Sales', 'Customer context & negotiation readiness', 'Contracts · Calls · SOC · Salesforce'],
+    ['Sales', 'Deal execution, follow-ups & contracting', 'Templates · Salesforce · SOC'],
+    ['Post-Sales', 'Status transparency & quote automation', 'Salesforce · iQuote'],
+    ['Post-Sales', 'Renewals & data quality', 'Regional datasets'],
+  ];
+
+  const nextSteps = [
+    'Use cases',
+    'Collaboration & Development with GBS DS team',
+    'Validation of functionality',
+    'Pilot demo and proper documentation',
+  ];
+
+  return (
+    <div className="scene-scroll" onClick={onNext}>
+      <div className="inner">
+        <motion.div initial="hidden" animate="visible" variants={stagger}
+          style={{ marginBottom:'clamp(16px,2.5vh,28px)' }}>
+          <motion.div variants={fadeUp} className="gold-lbl">03 // BUILD · PILOT DEVELOPMENT</motion.div>
+          <motion.div variants={fadeUp} className="serif" style={{
+            fontSize:'clamp(24px,3.6vw,50px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.12,
+          }}>
+            Phase II builds the agent<br/><span style={{ color:T.gold }}>with the GBS DS team.</span>
+          </motion.div>
+        </motion.div>
+
+        <div className="grid-3" style={{ marginBottom:'clamp(12px,1.8vh,16px)' }}>
+          <div className="card" style={{
+            borderTop:`4px solid ${T.gold}`,
+            opacity: ph >= 1 ? 1 : 0,
+            transform: ph >= 1 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.gold, marginBottom:10 }}>PILOT DEVELOPMENT</div>
+            <div className="serif" style={{ fontSize:'clamp(17px,1.8vw,23px)', fontWeight:700, color:T.cream, lineHeight:1.15, marginBottom:10 }}>
+              Develop the agent based on the AI Playbook.
+            </div>
+            <p style={{ fontSize:'clamp(10.5px,1.1vw,12.5px)', color:T.muted, lineHeight:1.65 }}>
+              Collaboration and development with the GBS DS team turns use cases into a pilot agent.
+            </p>
+          </div>
+
+          <div className="card" style={{
+            borderTop:`4px solid ${T.blue}`,
+            opacity: ph >= 2 ? 1 : 0,
+            transform: ph >= 2 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.blue, marginBottom:10 }}>VALIDATION</div>
+            <div className="serif" style={{ fontSize:'clamp(17px,1.8vw,23px)', fontWeight:700, color:T.cream, lineHeight:1.15, marginBottom:10 }}>
+              Validate functionality.
+            </div>
+            <p style={{ fontSize:'clamp(10.5px,1.1vw,12.5px)', color:T.muted, lineHeight:1.65 }}>
+              Confirm the pilot works against the identified use cases and required CRM data sources.
+            </p>
+          </div>
+
+          <div className="card" style={{
+            borderTop:`4px solid ${T.green}`,
+            opacity: ph >= 2 ? 1 : 0,
+            transform: ph >= 2 ? 'translateY(0)' : 'translateY(18px)',
+          }}>
+            <div className="lbl" style={{ color:T.green, marginBottom:10 }}>PILOT DEMO</div>
+            <div className="serif" style={{ fontSize:'clamp(17px,1.8vw,23px)', fontWeight:700, color:T.cream, lineHeight:1.15, marginBottom:10 }}>
+              Demonstrate to project owner and management.
+            </div>
+            <p style={{ fontSize:'clamp(10.5px,1.1vw,12.5px)', color:T.muted, lineHeight:1.65 }}>
+              Package the pilot with proper documentation for the next project stage.
+            </p>
+          </div>
+        </div>
+
+        <div className="card" style={{
+          marginBottom:'clamp(12px,1.8vh,16px)',
+          opacity: ph >= 3 ? 1 : 0,
+          transform: ph >= 3 ? 'translateY(0)' : 'translateY(18px)',
+        }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', gap:16, flexWrap:'wrap', marginBottom:12 }}>
+            <div className="lbl" style={{ color:T.gold }}>OUTCOMES · AI PLAYBOOK</div>
+            <div className="lbl">CRM lifecycle · topic · key data sources</div>
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+            {lifecycleRows.map(([stage, topic, sources]) => (
+              <div key={`${stage}-${topic}`} className="sca-row" style={{
+                borderTop:`1px solid ${T.line}`,
+                paddingTop:8,
+              }}>
+                <div className="serif" style={{ color:T.gold, fontSize:'clamp(14px,1.45vw,18px)', lineHeight:1.2 }}>{stage}</div>
+                <div style={{ color:T.cream, fontSize:'clamp(11px,1.1vw,13px)', lineHeight:1.5 }}>{topic}</div>
+                <div className="sca-impact" style={{ color:T.muted, fontSize:'clamp(10px,1vw,12px)', lineHeight:1.5 }}>{sources}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="card" style={{
+          background:`linear-gradient(135deg,rgba(52,211,153,.08),rgba(0,0,0,.5))`,
+          borderColor:'rgba(52,211,153,.25)',
+          opacity: ph >= 4 ? 1 : 0,
+          transition:'opacity .5s ease',
+        }}>
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:20, flexWrap:'wrap' }}>
+            <div>
+              <div className="gold-lbl" style={{ marginBottom:8 }}>WHERE WE ARE NOW</div>
+              <div className="serif" style={{ fontSize:'clamp(19px,2.3vw,30px)', color:T.cream, lineHeight:1.18, fontWeight:700 }}>
+                Phase II: AI Agent and prototype development.
+              </div>
+            </div>
+            <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', justifyContent:'flex-end' }}>
+              {nextSteps.map((step, i) => (
+                <React.Fragment key={step}>
+                  {i > 0 && <span style={{ color:'rgba(237,233,224,.22)', fontSize:11 }}>→</span>}
+                  <span className="mono" style={{
+                    color:i === nextSteps.length - 1 ? T.green : T.cream,
+                    fontSize:'clamp(8.5px,.9vw,10.5px)',
+                    letterSpacing:'.08em',
+                    textTransform:'uppercase',
+                    maxWidth:150,
+                    lineHeight:1.35,
+                  }}>{step}</span>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop:14, display:'flex', alignItems:'center', gap:16, animation:'fade .5s ease .5s both' }}>
+          <div style={{ height:1, flex:1, background:`linear-gradient(to right,${T.gold}60,transparent)` }}/>
+          <div className="lbl">CLICK TO CONTINUE →</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SALES GENIE — CLOSE ───────────────────────────────────────────
+function SalesGenieClose() {
+  const [ph, setPh] = useState(0);
+  useEffect(() => {
+    const ts = [
+      setTimeout(() => setPh(1), 400),
+      setTimeout(() => setPh(2), 1300),
+      setTimeout(() => setPh(3), 2200),
+    ];
+    return () => ts.forEach(clearTimeout);
+  }, []);
+
+  return (
+    <div className="scene">
+      <div style={{ textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', gap:28 }}>
+        <div style={{
+          overflow:'hidden',
+          opacity: ph >= 1 ? 1 : 0, transition:'opacity .7s ease',
+        }}>
+          <div className="serif" style={{
+            fontSize:'clamp(46px,7.8vw,104px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.05,
+            animation: ph >= 1 ? 'rise .9s cubic-bezier(.22,1,.36,1) both' : 'none',
+          }}>
+            Thanks for your attention.
+          </div>
+        </div>
+
+        {ph >= 2 && (
+          <div style={{
+            width:'clamp(80px,12vw,140px)', height:1,
+            background:`linear-gradient(to right,transparent,${T.gold},transparent)`,
+            transformOrigin:'center',
+            animation:'scaleIn .8s cubic-bezier(.22,1,.36,1) both',
+          }}/>
+        )}
+
+        {ph >= 3 && (
+          <div style={{ animation:'rise .7s cubic-bezier(.22,1,.36,1) both' }}>
+            <div className="gold-lbl" style={{ justifyContent:'center', marginBottom:8 }}>Q&A</div>
+            <div className="lbl" style={{ letterSpacing:'.18em' }}>SALES GENIE · AGENTIC AI · TEAM GENIEX</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── DECK SELECTOR ─────────────────────────────────────────────────
+function DeckSelector({ onSelect }) {
+  const decks = [
+    {
+      id:'story',
+      label:'My Story',
+      kicker:'DELL TECHNOLOGIES · SCA TPM',
+      title:'Search. Prove. Build.',
+      detail:'The original personal narrative and SCA TPM closing argument.',
+      color:T.gold,
+    },
+    {
+      id:'sales',
+      label:'Sales Genie',
+      kicker:'TEAM GENIEX · NEW HORIZONS 2025',
+      title:'Agentic AI for CRM.',
+      detail:'A Sales Genie project story built from the attached deck.',
+      color:T.green,
+    },
+  ];
+
+  return (
+    <div className="scene">
+      <div className="inner" style={{ maxWidth:'min(1080px,100%)' }}>
+        <div style={{ marginBottom:'clamp(24px,4vh,44px)', animation:'rise .7s ease both' }}>
+          <div className="gold-lbl">CHOOSE PRESENTATION</div>
+          <div className="serif" style={{
+            fontSize:'clamp(34px,5.6vw,78px)', fontWeight:300, fontStyle:'italic',
+            color:T.cream, lineHeight:1.04,
+          }}>
+            Select the story.
+          </div>
+        </div>
+
+        <div className="grid-2">
+          {decks.map(deck => (
+            <button
+              key={deck.id}
+              type="button"
+              className="card"
+              onClick={() => onSelect(deck.id)}
+              style={{
+                textAlign:'left',
+                cursor:'pointer',
+                minHeight:230,
+                borderTop:`4px solid ${deck.color}`,
+                color:T.cream,
+              }}
+            >
+              <div className="lbl" style={{ color:deck.color, marginBottom:16 }}>{deck.kicker}</div>
+              <div className="serif" style={{
+                fontSize:'clamp(28px,3.2vw,46px)', fontWeight:700,
+                color:T.cream, lineHeight:1.08, marginBottom:14,
+              }}>
+                {deck.label}
+              </div>
+              <div className="serif" style={{
+                fontSize:'clamp(18px,2vw,27px)', fontStyle:'italic',
+                color:deck.color, lineHeight:1.15, marginBottom:18,
+              }}>
+                {deck.title}
+              </div>
+              <p style={{ fontSize:'clamp(11px,1.2vw,13.5px)', color:T.muted, lineHeight:1.65 }}>
+                {deck.detail}
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── SCENE 0 — SPLASH (before presentation begins) ────────────────
-function SceneSplash({ onStart }) {
+function SceneSplash({ deck, onStart }) {
   const [ph, setPh] = useState(0);
   useEffect(() => {
     const ts = [
@@ -623,6 +1229,18 @@ function SceneSplash({ onStart }) {
     return () => ts.forEach(clearTimeout);
   }, []);
 
+  const splash = deck === 'sales'
+    ? {
+      eyebrow:'SALES GENIE · AGENTIC AI',
+      title:'Team GenieX',
+      date:'NEW HORIZONS 2025',
+    }
+    : {
+      eyebrow:'DELL TECHNOLOGIES · SCA TPM',
+      title:'Vishnu Pratap Kumar',
+      date:'MAY 2026',
+    };
+
   return (
     <div className="scene">
       <div style={{ textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', gap:24 }}>
@@ -632,15 +1250,15 @@ function SceneSplash({ onStart }) {
           animation: ph >= 1 ? 'rise .85s cubic-bezier(.22,1,.36,1) both' : 'none',
         }}>
           <div className="gold-lbl" style={{ justifyContent:'center', marginBottom:10 }}>
-            DELL TECHNOLOGIES · SCA TPM
+            {splash.eyebrow}
           </div>
           <div className="serif" style={{
             fontSize:'clamp(22px,2.6vw,34px)', color:T.cream,
             fontWeight:300, letterSpacing:'.06em', lineHeight:1.3,
           }}>
-            Vishnu Pratap Kumar
+            {splash.title}
           </div>
-          <div className="lbl" style={{ marginTop:8, letterSpacing:'.2em' }}>MAY 2026</div>
+          <div className="lbl" style={{ marginTop:8, letterSpacing:'.2em' }}>{splash.date}</div>
         </div>
 
         {ph >= 2 && (
@@ -673,13 +1291,13 @@ function SceneSplash({ onStart }) {
 }
 
 // ── PROGRESS DOTS ─────────────────────────────────────────────────
-function ProgressDots({ scene }) {
+function ProgressDots({ scene, meta }) {
   return (
     <div style={{
       position:'fixed', right:14, top:'50%', transform:'translateY(-50%)',
       zIndex:600, display:'flex', flexDirection:'column', alignItems:'flex-end',
     }}>
-      {META.map((m, i) => {
+      {meta.map((m, i) => {
         const cur  = i === scene, past = i < scene;
         const dc   = cur ? T.gold : past ? 'rgba(201,169,110,.45)' : 'rgba(237,233,224,.13)';
         const tc   = cur ? T.gold : past ? 'rgba(201,169,110,.36)' : 'rgba(237,233,224,.1)';
@@ -706,7 +1324,7 @@ function ProgressDots({ scene }) {
   );
 }
 
-// ── SCENE 6 — THANK YOU ───────────────────────────────────────────
+// ── SCENE 7 — THANK YOU ───────────────────────────────────────────
 function SceneClose() {
   const [ph, setPh] = useState(0);
   useEffect(() => {
@@ -757,9 +1375,16 @@ function SceneClose() {
 }
 
 // ── ROOT ──────────────────────────────────────────────────────────
-const SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, SceneSCA, SceneClose];
+const MY_STORY_SCENES = [SceneOpen, SceneSearch, SceneProve, SceneBuild, SceneSCA, SceneClose];
+const SALES_GENIE_SCENES = [SalesGenieOpen, SalesGenieSearch, SalesGenieProve, SalesGenieBuild, SalesGenieClose];
+
+const DECKS = {
+  story: { meta:MY_STORY_META, scenes:MY_STORY_SCENES },
+  sales: { meta:SALES_GENIE_META, scenes:SALES_GENIE_SCENES },
+};
 
 export default function App() {
+  const [deck, setDeck]       = useState(null);
   const [started, setStarted] = useState(false);
   const [scene, setScene]     = useState(0);
   const [cutting, setCutting] = useState(false);
@@ -768,12 +1393,19 @@ export default function App() {
     setCutting(true);
     setTimeout(() => { fn(); setCutting(false); }, 230);
   };
+  const active = deck ? DECKS[deck] : DECKS.story;
+  const selectDeck = id => cut(() => {
+    setDeck(id);
+    setStarted(false);
+    setScene(0);
+  });
   const handleStart = () => cut(() => setStarted(true));
-  const next = () => cut(() => setScene(s => Math.min(s+1, SCENES.length-1)));
+  const next = () => cut(() => setScene(s => Math.min(s+1, active.scenes.length-1)));
   const prev = () => cut(() => setScene(s => Math.max(s-1, 0)));
 
   useEffect(() => {
     const h = e => {
+      if (!deck) return;
       if (!started) {
         if (e.key===' '||e.key==='Enter') { e.preventDefault(); handleStart(); }
         return;
@@ -783,10 +1415,10 @@ export default function App() {
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, [started]); // eslint-disable-line
+  }, [deck, started, active]); // eslint-disable-line
 
-  const Scene = SCENES[scene];
-  const meta  = started ? META[scene] : META[0];
+  const Scene = active.scenes[scene];
+  const meta  = started ? active.meta[scene] : active.meta[0];
   const chrome = 'rgba(237,233,224,.22)';
 
   return (
@@ -817,7 +1449,7 @@ export default function App() {
         position:'fixed', inset:0, zIndex:1, pointerEvents:'none',
         backgroundImage:`url(${meta.bg})`,
         backgroundSize:'cover', backgroundPosition:'center',
-        opacity: !started ? 0.38 : scene===3 ? 0.52 : scene===4 ? 0.42 : scene===5 ? 0.35 : 0.62,
+        opacity: !started ? 0.38 : meta.label==='BUILD' ? 0.52 : meta.label==='SCA' ? 0.42 : meta.label==='END' ? 0.35 : 0.62,
         transition:'opacity .6s ease',
       }}/>
 
@@ -831,19 +1463,23 @@ export default function App() {
       {/* Scene transition flash */}
       {cutting && <div style={{ position:'fixed', inset:0, zIndex:950, background:'#000', pointerEvents:'none' }}/>}
 
-      {/* Splash or active scene */}
-      {!started ? (
-        <div key="splash" style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .5s ease' }}>
-          <SceneSplash onStart={handleStart}/>
+      {/* Selector, splash, or active scene */}
+      {!deck ? (
+        <div key="selector" style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .5s ease' }}>
+          <DeckSelector onSelect={selectDeck}/>
+        </div>
+      ) : !started ? (
+        <div key={`${deck}-splash`} style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .5s ease' }}>
+          <SceneSplash deck={deck} onStart={handleStart}/>
         </div>
       ) : (
-        <div key={scene} style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .38s ease' }}>
+        <div key={`${deck}-${scene}`} style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .38s ease' }}>
           <Scene onNext={next}/>
         </div>
       )}
 
       {/* Progress — only after started */}
-      {started && <ProgressDots scene={scene}/>}
+      {started && <ProgressDots scene={scene} meta={active.meta}/>}
 
       {/* Back — only after started */}
       {started && scene > 0 && (
