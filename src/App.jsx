@@ -1384,7 +1384,7 @@ const DECKS = {
 };
 
 export default function App() {
-  const [deck, setDeck]       = useState(null);
+  const [deck]                = useState('sales');
   const [started, setStarted] = useState(false);
   const [scene, setScene]     = useState(0);
   const [cutting, setCutting] = useState(false);
@@ -1394,11 +1394,6 @@ export default function App() {
     setTimeout(() => { fn(); setCutting(false); }, 230);
   };
   const active = deck ? DECKS[deck] : DECKS.story;
-  const selectDeck = id => cut(() => {
-    setDeck(id);
-    setStarted(false);
-    setScene(0);
-  });
   const handleStart = () => cut(() => setStarted(true));
   const next = () => cut(() => setScene(s => Math.min(s+1, active.scenes.length-1)));
   const prev = () => cut(() => setScene(s => Math.max(s-1, 0)));
@@ -1463,12 +1458,8 @@ export default function App() {
       {/* Scene transition flash */}
       {cutting && <div style={{ position:'fixed', inset:0, zIndex:950, background:'#000', pointerEvents:'none' }}/>}
 
-      {/* Selector, splash, or active scene */}
-      {!deck ? (
-        <div key="selector" style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .5s ease' }}>
-          <DeckSelector onSelect={selectDeck}/>
-        </div>
-      ) : !started ? (
+      {/* Splash or active scene */}
+      {!started ? (
         <div key={`${deck}-splash`} style={{ position:'fixed', inset:'36px 0', zIndex:10, animation:'fade .5s ease' }}>
           <SceneSplash deck={deck} onStart={handleStart}/>
         </div>
