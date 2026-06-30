@@ -1384,7 +1384,7 @@ const DECKS = {
 };
 
 export default function App() {
-  const [deck]                = useState('sales');
+  const [deck]                = useState('story');
   const [started, setStarted] = useState(false);
   const [scene, setScene]     = useState(0);
   const [cutting, setCutting] = useState(false);
